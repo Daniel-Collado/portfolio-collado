@@ -118,27 +118,27 @@ const PortfolioContent = () => {
         <section id="contacto" className="section-container">
             <h2 className="section-title">{t('contact')}</h2>
             <div className="contact-content">
-            <p className="section-text mb-4">{t('address_label')}</p>
-            <p className="section-text email-section">
-                <strong>{t('email_label')}</strong>
-                <a href="mailto:danielcolladodev@gmail.com" className="email-link">
-                <i className="fas fa-envelope email-icon"></i>
-                danielcolladodev@gmail.com
-                </a>
-            </p>
-            <p className="section-text mb-4">{t('address')}</p>
-            <form onSubmit={handleSubmit} className="contact-form">
-                <div className="form-group">
-                <label htmlFor="from_name">{t('form_name')}</label>
-                <input
-                    type="text"
-                    id="from_name"
-                    name="from_name"
-                    value={formData.from_name}
-                    onChange={handleChange}
-                    placeholder={t('form_name_placeholder')}
-                    required
-                />
+                <p className="section-text email-section"
+                    style={{ marginTop: '5px', marginBottom: '5px' }}>
+                    <strong>{t('email_label')}</strong>
+                    <a href="mailto:danielcolladodev@gmail.com" className="email-link">
+                    <i className="fas fa-envelope email-icon"></i>
+                    danielcolladodev@gmail.com
+                    </a>
+                </p>
+                <p className="section-text mb-4" style={{ marginTop: '0.3rem' }}>{t('address')}</p>
+                <form onSubmit={handleSubmit} className="contact-form">
+                    <div className="form-group">
+                    <label htmlFor="from_name">{t('form_name')}</label>
+                    <input
+                        type="text"
+                        id="from_name"
+                        name="from_name"
+                        value={formData.from_name}
+                        onChange={handleChange}
+                        placeholder={t('form_name_placeholder')}
+                        required
+                    />
                 </div>
                 <div className="form-group">
                 <label htmlFor="from_email">{t('form_email')}</label>

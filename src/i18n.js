@@ -27,7 +27,6 @@ const resources = {
         view_project: 'Ver en GitHub',
         services_description:
             'Realizo páginas web dinámicas y responsivas, adaptadas a las necesidades del cliente. Las mismas pueden ser desde una tienda e-commerce a un portfolio personal. Hago mantenimiento mensual del código, corrección de errores, sumo nuevas funcionalidades. Readapto la página a tus necesidades actuales.',
-        address_label: 'Dirección:',
         email_label: 'Correo:',
         address: 'La Plata, Buenos Aires, Argentina',
         form_name: 'Nombre',
@@ -66,7 +65,6 @@ const resources = {
         view_project: 'View on GitHub',
         services_description:
             'I create dynamic and responsive websites tailored to the client’s needs, ranging from e-commerce stores to personal portfolios. I offer monthly code maintenance, bug fixes, and new feature additions. I adapt the website to your current needs.',
-        address_label: 'Address:',
         email_label: 'Email:',
         address: 'La Plata, Buenos Aires, Argentina',
         form_name: 'Name',
