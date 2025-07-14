@@ -1,0 +1,118 @@
+.stars-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* Base visible detrás del contenido */
+    background: #0A0C1B; /* Fondo oscuro sólido */
+    overflow: hidden;
+    /* border: 2px solid red; ELIMINADO: Borde temporal para depuración visual */
+}
+
+.star {
+    position: absolute;
+    background: #ffffff; /* Blanco puro */
+    border-radius: 50%;
+    /* Animaciones combinadas: parpadeo y movimiento lento */
+    animation: twinkle 4s infinite, star-move var(--star-move-duration) infinite alternate;
+}
+
+.star.small {
+    width: 2px;
+    height: 2px;
+}
+.star.medium {
+    width: 3px;
+    height: 3px;
+}
+.star.large {
+    width: 4px;
+    height: 4px;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+/* Nueva animación para el movimiento sutil de las estrellas */
+@keyframes star-move {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(var(--star-translate-x), var(--star-translate-y)); }
+}
+
+.comet {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: #2bffff;
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(43, 255, 255, 0.9), 0 0 40px rgba(43, 255, 255, 0.6);
+    will-change: transform, opacity;
+    z-index: -1; /* Cometas detrás de las estrellas */
+}
+
+/* Animaciones de cometas desde diferentes direcciones */
+@keyframes comet-diag-lr-up { /* De abajo-izquierda a arriba-derecha */
+    0% { transform: translate(-10vw, 110vh); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translate(110vw, -10vh); opacity: 0; }
+}
+
+@keyframes comet-diag-rl-down { /* De arriba-derecha a abajo-izquierda */
+    0% { transform: translate(110vw, -10vh); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translate(-10vw, 110vh); opacity: 0; }
+}
+
+@keyframes comet-diag-tl-br { /* De arriba-izquierda a abajo-derecha */
+    0% { transform: translate(-10vw, -10vh); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translate(110vw, 110vh); opacity: 0; }
+}
+
+@keyframes comet-diag-bl-tr { /* De abajo-derecha a arriba-izquierda */
+    0% { transform: translate(110vw, 110vh); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translate(-10vw, -10vh); opacity: 0; }
+}
+
+@keyframes comet-horiz-lr { /* De izquierda a derecha (posición aleatoria) */
+    0% { transform: translate(-10vw, var(--comet-start-y)); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translate(110vw, var(--comet-end-y)); opacity: 0; }
+}
+
+@keyframes comet-horiz-rl { /* De derecha a izquierda (posición aleatoria) */
+    0% { transform: translate(110vw, var(--comet-start-y)); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translate(-10vw, var(--comet-end-y)); opacity: 0; }
+}
+
+@keyframes comet-horiz-lr-mid { /* De izquierda a derecha (centro de la pantalla) */
+    0% { transform: translate(-10vw, 50vh); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translate(110vw, 50vh); opacity: 0; }
+}
+
+@keyframes comet-horiz-rl-top { /* De derecha a izquierda (parte superior) */
+    0% { transform: translate(110vw, 20vh); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translate(-10vw, 20vh); opacity: 0; }
+}
+
+@media (max-width: 768px) {
+    .star.small { width: 1.5px; height: 1.5px; }
+    .star.medium { width: 2px; height: 2px; }
+    .star.large { width: 3px; height: 3px; }
+    .comet { width: 4px; height: 4px; box-shadow: 0 0 15px rgba(43, 255, 255, 0.9), 0 0 30px rgba(43, 255, 255, 0.6); }
+}

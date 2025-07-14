@@ -4,6 +4,7 @@ body {
   padding: 0;
   background: #000000; /* Fondo negro sólido */
   overflow-x: hidden;
+  color: #fff; /* Asegura que el texto general del body sea blanco */
 }
 
 /* Contenido general */
@@ -23,8 +24,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; /* CAMBIO CLAVE: Centra verticalmente el contenido */
   width: 100%;
-  min-height: 100vh;
+  min-height: 100vh; /* Asegura que ocupe toda la altura disponible */
 }
 
 /* Estilos del Header */
@@ -33,12 +35,13 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  /* min-height: 100vh; ELIMINADO: Esto causaba problemas de layout al cambiar de sección */
   text-align: center;
   padding: 2rem;
   box-sizing: border-box;
   background: transparent;
   width: 100%;
+  flex-shrink: 0; /* Evita que el header se encoja */
 }
 
 .header-title {
@@ -82,13 +85,24 @@ body {
   color: #000000;
 }
 
+/* Estilos para el botón de navegación activo */
+.nav-button.active {
+  background-color: #2bffff; /* Color de acento para el botón activo */
+  color: #000000;
+  border: 2px solid #ffffff;
+  font-weight: 700;
+}
+
 /* Estilos de las secciones */
 .main-content {
+  background: rgba(0, 0, 0, 0.2);
   padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
+  flex-grow: 1; /* Permite que main-content ocupe el espacio restante */
+  box-sizing: border-box;
 }
 
 .section-container {
@@ -99,14 +113,29 @@ body {
   margin-left: auto;
   margin-right: auto;
   max-width: 64rem;
-  min-height: 100vh;
+  min-height: 100vh; /* Se mantiene aquí para que cada sección ocupe toda la altura */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
   width: 100%;
+  /* Añade una transición para la visibilidad */
+  transition: opacity 0.5s ease-in-out;
 }
+
+/* Clase para ocultar secciones */
+.section-hidden {
+    opacity: 0;
+    height: 0; /* Colapsa la altura para que no ocupe espacio */
+    overflow: hidden; /* Oculta el contenido desbordado */
+    pointer-events: none; /* Deshabilita interacciones */
+    margin-bottom: 0; /* Elimina el margen inferior cuando está oculto */
+    padding-top: 0;
+    padding-bottom: 0;
+    display: none; /* CAMBIO CLAVE: Usa display: none para evitar que ocupe espacio y cause layout shifts */
+}
+
 
 .section-title {
   font-family: "Frank Ruhl Libre", serif;
@@ -246,6 +275,59 @@ body {
   color: #000000;
 }
 
+/* Estilos para el botón de "Scroll to Top" */
+.scroll-top-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #2bffff; /* Color de acento */
+  color: #000000;
+  border: none;
+  border-radius: 50%; /* Botón redondo */
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  opacity: 0; /* Inicialmente oculto */
+  visibility: hidden; /* Inicialmente oculto */
+  transform: translateY(20px); /* Pequeño desplazamiento inicial */
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out, transform 0.3s ease-in-out;
+  z-index: 1000; /* Asegura que esté por encima de otros elementos */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.scroll-top-button.visible {
+  opacity: 1; /* Visible cuando la clase 'visible' está presente */
+  visibility: visible;
+  transform: translateY(0); /* Vuelve a su posición */
+}
+
+/* Animación para los títulos de sección */
+@keyframes fadeInSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-title {
+  animation: fadeInSlideUp 0.8s ease-out forwards;
+}
+
+/* Clase para la animación del header al entrar */
+.header-entering {
+  opacity: 0; /* Hace que el header sea invisible al inicio de la animación */
+  transition: opacity 0.5s ease; /* Transición suave para la opacidad */
+}
+
+
 /* Responsividad */
 @media (min-width: 768px) {
   .header-title {
@@ -276,20 +358,16 @@ body {
 }
 
 @media (max-width: 768px) {
+  .header {
+    padding: 20px 10px;
+  }
+
   .header-title {
     font-size: 2.5rem;
   }
 
   .header-text {
     font-size: 1.25rem;
-  }
-
-  .section-title {
-    font-size: 2rem;
-  }
-
-  .section-text {
-    font-size: 1rem;
   }
 
   .header-nav {
