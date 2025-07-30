@@ -81,14 +81,14 @@ body {
 }
 
 .nav-button:hover {
-  background-color: #2bffff;
+  background-color: #D3D3D3;
   color: #000000;
 }
 
 /* Estilos para el botón de navegación activo */
 .nav-button.active {
-  background-color: #2bffff; /* Color de acento para el botón activo */
-  color: #000000;
+  background-color: #008b8e; /* Color de acento para el botón activo */
+  color: #ffffff;
   border: 2px solid #ffffff;
   font-weight: 700;
 }
@@ -212,7 +212,7 @@ body {
 }
 
 .email-link:hover {
-  color: #2bffff;
+  color: #008b8e;
 }
 
 .email-icon {
@@ -271,7 +271,7 @@ body {
 }
 
 .project-link:hover {
-  background-color: #2bffff;
+  background-color: #008b8e;
   color: #000000;
 }
 
@@ -280,8 +280,8 @@ body {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #2bffff; /* Color de acento */
-  color: #000000;
+  background-color: #008b8e; /* Color de acento */
+  color: #ffffff;
   border: none;
   border-radius: 50%; /* Botón redondo */
   width: 50px;
@@ -413,12 +413,12 @@ body {
 }
 
 .language-switcher button:hover {
-  background-color: #2bffff;
+  background-color: #008b8e;
 }
 
 .language-switcher button.active {
-  background-color: #2bffff;
-  color: #000000;
+  background-color: #008b8e;
+  color: #ffffff;
 }
 
 .contact-form {

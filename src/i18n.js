@@ -15,16 +15,19 @@ const resources = {
         education: 'Formación:',
         education_details: '2022 - presente // Coderhouse, Potrero Digital, Argentina Programa.',
         projects_description: 'Aquí están algunos de mis trabajos más recientes:',
-        project_1_title: 'Proyecto 1',
+        project_1_title: 'Juan Pablo Vogt Portfolio',
         project_1_description:
-            'Tienda e-commerce realizada con React + Vite, con Mercado Pago integrado.',
-        project_2_title: 'Proyecto 2',
+            'El portfolio se trabajó a partir de un concepto minimalista. Está realizado en React',
+        project_2_title: 'Tienda Jardín Olmos',
         project_2_description:
-            'Tienda e-commerce realizada en JavaScript, con carrito de compras.',
-        project_3_title: 'Proyecto 3',
+            'Tienda e-commerce realizada con React + Vite, con Mercado Pago integrado.',
+        project_3_title: 'Tienda Javascript',
         project_3_description:
+            'Tienda e-commerce realizada en JavaScript, con carrito de compras.',
+        project_4_title: 'Caldén Macetas',
+        project_4_description:
             'Tienda de muestra de productos con énfasis en lo visual, realizada con Html + CSS y Bootstrap.',
-        view_project: 'Ver en GitHub',
+        view_project: 'Ver Página',
         services_description:
             'Realizo páginas web dinámicas y responsivas, adaptadas a las necesidades del cliente. Las mismas pueden ser desde una tienda e-commerce a un portfolio personal. Hago mantenimiento mensual del código, corrección de errores, sumo nuevas funcionalidades. Readapto la página a tus necesidades actuales.',
         email_label: 'Correo:',
@@ -53,16 +56,19 @@ const resources = {
         education: 'Education:',
         education_details: '2022 - present // Coderhouse, Potrero Digital, Argentina Programa.',
         projects_description: 'Here are some of my most recent works:',
-        project_1_title: 'Project 1',
+        project_1_title: 'Juan Pablo Vogt Portfolio',
         project_1_description:
-            'E-commerce store built with React + Vite, integrated with Mercado Pago.',
-        project_2_title: 'Project 2',
+            'The portfolio was created from a minimalist concept, using React.',
+        project_2_title: 'Olmos Garden Store',
         project_2_description:
-            'E-commerce store built in JavaScript, with a shopping cart.',
-        project_3_title: 'Project 3',
+            'E-commerce store built with React + Vite, integrated with Mercado Pago.',
+        project_3_title: 'Javascript Store',
         project_3_description:
+            'E-commerce store built in JavaScript, with a shopping cart.',
+        project_4_title: 'Caldén Pots',
+        project_4_description:
             'Product showcase store with a focus on visuals, built with HTML + CSS and Bootstrap.',
-        view_project: 'View on GitHub',
+        view_project: 'View Page',
         services_description:
             'I create dynamic and responsive websites tailored to the client’s needs, ranging from e-commerce stores to personal portfolios. I offer monthly code maintenance, bug fixes, and new feature additions. I adapt the website to your current needs.',
         email_label: 'Email:',

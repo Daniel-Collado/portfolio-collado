@@ -65,9 +65,22 @@ const PortfolioContent = ({ activeSection, setActiveSection, scrollToTop, formDa
                     <p className="section-text">{t('projects_description')}</p>
                     <div className="projects-grid">
                         <div className="project-card">
-                            <img src="/images/Tienda-ecommerce.png" alt="Proyecto 1" className="project-image" />
+                            <img src="/images/portfolio-juan-vogt.jpg" alt="Proyecto 1" className="project-image" />
                             <h3 className="project-title">{t('project_1_title')}</h3>
                             <p className="section-text mb-4">{t('project_1_description')}</p>
+                            <a
+                                href="https://www.juanpablovogt.com.ar/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="project-link"
+                            >
+                                {t('view_project')}
+                            </a>
+                        </div>
+                        <div className="project-card">
+                            <img src="/images/Tienda-ecommerce.png" alt="Proyecto 2" className="project-image" />
+                            <h3 className="project-title">{t('project_2_title')}</h3>
+                            <p className="section-text mb-4">{t('project_2_description')}</p>
                             <a
                                 href="https://tienda-jardin-olmos.vercel.app/"
                                 target="_blank"
@@ -78,9 +91,9 @@ const PortfolioContent = ({ activeSection, setActiveSection, scrollToTop, formDa
                             </a>
                         </div>
                         <div className="project-card">
-                            <img src="/images/Tienda-javascript.png" alt="Proyecto 2" className="project-image" />
-                            <h3 className="project-title">{t('project_2_title')}</h3>
-                            <p className="section-text mb-4">{t('project_1_description')}</p>
+                            <img src="/images/Tienda-javascript.png" alt="Proyecto 3" className="project-image" />
+                            <h3 className="project-title">{t('project_3_title')}</h3>
+                            <p className="section-text mb-4">{t('project_3_description')}</p>
                             <a
                                 href="https://daniel-collado.github.io/JavaScript-Coder-2/"
                                 target="_blank"
@@ -91,9 +104,9 @@ const PortfolioContent = ({ activeSection, setActiveSection, scrollToTop, formDa
                             </a>
                         </div>
                         <div className="project-card">
-                            <img src="/images/Tienda-Html-y-CSS.png" alt="Proyecto 3" className="project-image" />
-                            <h3 className="project-title">{t('project_3_title')}</h3>
-                            <p className="section-text mb-4">{t('project_3_description')}</p>
+                            <img src="/images/Tienda-Html-y-CSS.png" alt="Proyecto 4" className="project-image" />
+                            <h3 className="project-title">{t('project_4_title')}</h3>
+                            <p className="section-text mb-4">{t('project_4_description')}</p>
                             <a
                                 href="https://daniel-collado.github.io/CH-DW-Tercera-Entrega/index.html"
                                 target="_blank"
