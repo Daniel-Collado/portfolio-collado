@@ -8,9 +8,7 @@ import './index.css';
 
 function App() {
     const { t } = useTranslation();
-    // Estado para controlar qué sección está activa. Inicia como null para centrar el header.
     const [activeSection, setActiveSection] = useState(null);
-    // Estado para controlar la animación de entrada del header al hacer scroll to top
     const [isHeaderEntering, setIsHeaderEntering] = useState(false);
 
     // Estados y funciones del formulario de contacto
@@ -21,17 +19,16 @@ function App() {
     });
     const [status, setStatus] = useState('');
 
-    // Función para desplazarse al inicio de la página y centrar el header
     const scrollToTop = () => {
-        setIsHeaderEntering(true); // Activa la animación de entrada del header
-        const scrollStep = -window.scrollY / (800 / 15); // Duración de 800ms para el scroll
+        setIsHeaderEntering(true);
+        const scrollStep = -window.scrollY / (800 / 15);
         const scrollInterval = setInterval(() => {
             if (window.scrollY !== 0) {
                 window.scrollBy(0, scrollStep);
             } else {
                 clearInterval(scrollInterval);
-                setActiveSection(null); // Establece activeSection a null para mostrar solo el header centrado
-                setIsHeaderEntering(false); // Desactiva la animación del header
+                setActiveSection(null);
+                setIsHeaderEntering(false);
             }
         }, 15);
     };
@@ -73,9 +70,14 @@ function App() {
             });
     };
 
+    // Ya NO necesitamos la lógica para los cometas aquí (numberOfComets, cometsArray)
+
     return (
         <div className="app">
+            {/* Renderiza el fondo de estrellas (que ahora es estático y sin cometas) */}
             <StarryBackground />
+            {/* Ya NO renderizamos los cometas aquí */}
+
             {/* content-wrapper ahora gestiona el centrado vertical */}
             <div className="content-wrapper">
                 {/* El Header siempre se renderiza */}
