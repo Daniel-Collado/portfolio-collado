@@ -17,15 +17,18 @@ const resources = {
         projects_description: 'Aquí están algunos de mis trabajos más recientes:',
         project_1_title: 'Juan Pablo Vogt Portfolio',
         project_1_description:
-            'El portfolio se trabajó a partir de un concepto minimalista. Está realizado en React',
-        project_2_title: 'Tienda Jardín Olmos',
+            'El portfolio se trabajó a partir de un concepto minimalista. Está realizado con React + Vite.',
+        project_2_title: 'Oeste Cursos',
         project_2_description:
-            'Tienda e-commerce realizada con React + Vite, con Mercado Pago integrado.',
-        project_3_title: 'Tienda Javascript',
+            'Plataforma de cursos online con login de usuarios.',
+        project_3_title: 'Tienda Jardín Olmos',
         project_3_description:
-            'Tienda e-commerce realizada en JavaScript, con carrito de compras.',
-        project_4_title: 'Caldén Macetas',
+            'Tienda e-commerce realizada con React + Vite, con Mercado Pago integrado.',
+        project_4_title: 'Tienda Javascript',
         project_4_description:
+            'Tienda e-commerce realizada en JavaScript, con carrito de compras.',
+        project_5_title: 'Caldén Macetas',
+        project_5_description:
             'Tienda de muestra de productos con énfasis en lo visual, realizada con Html + CSS y Bootstrap.',
         view_project: 'Ver Página',
         services_description:
@@ -58,15 +61,18 @@ const resources = {
         projects_description: 'Here are some of my most recent works:',
         project_1_title: 'Juan Pablo Vogt Portfolio',
         project_1_description:
-            'The portfolio was created from a minimalist concept, using React.',
-        project_2_title: 'Olmos Garden Store',
+            'The portfolio was created from a minimalist concept, using React + Vite.',
+        project_2_title: 'West Courses',
         project_2_description:
-            'E-commerce store built with React + Vite, integrated with Mercado Pago.',
-        project_3_title: 'Javascript Store',
+            'Online course platform with user login.',
+        project_3_title: 'Olmos Garden Store',
         project_3_description:
-            'E-commerce store built in JavaScript, with a shopping cart.',
-        project_4_title: 'Caldén Pots',
+            'E-commerce store built with React + Vite, integrated with Mercado Pago.',
+        project_4_title: 'Javascript Store',
         project_4_description:
+            'E-commerce store built in JavaScript, with a shopping cart.',
+        project_5_title: 'Caldén Pots',
+        project_5_description:
             'Product showcase store with a focus on visuals, built with HTML + CSS and Bootstrap.',
         view_project: 'View Page',
         services_description:
