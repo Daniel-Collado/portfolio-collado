@@ -20,7 +20,7 @@ const resources = {
             'El portfolio se trabajó a partir de un concepto minimalista. Está realizado con React + Vite.',
         project_2_title: 'Oeste Cursos',
         project_2_description:
-            'Plataforma de cursos online con login de usuarios.',
+            'Plataforma de cursos online con login de usuarios y contenido pregrabado.',
         project_3_title: 'Tienda Jardín Olmos',
         project_3_description:
             'Tienda e-commerce realizada con React + Vite, con Mercado Pago integrado.',
@@ -64,7 +64,7 @@ const resources = {
             'The portfolio was created from a minimalist concept, using React + Vite.',
         project_2_title: 'West Courses',
         project_2_description:
-            'Online course platform with user login.',
+            'Online course platform with user login and pre-recorded content.',
         project_3_title: 'Olmos Garden Store',
         project_3_description:
             'E-commerce store built with React + Vite, integrated with Mercado Pago.',
