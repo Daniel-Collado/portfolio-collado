@@ -129,6 +129,19 @@ const PortfolioContent = ({ activeSection, setActiveSection, scrollToTop, formDa
                                 {t('view_project')}
                             </a>
                         </div>
+                        <div className="project-card">
+                            <img src="/images/disqueria.jpg" alt="Proyecto 6" className="project-image" />
+                            <h3 className="project-title">{t('project_6_title')}</h3>
+                            <p className="section-text mb-4">{t('project_6_description')}</p>
+                            <a
+                                href="https://disqueriaback.vercel.app/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="project-link"
+                            >
+                                {t('view_project')}
+                            </a>
+                        </div>
                     </div>
                 </section>
             )}

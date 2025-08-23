@@ -30,6 +30,9 @@ const resources = {
         project_5_title: 'Caldén Macetas',
         project_5_description:
             'Tienda de muestra de productos con énfasis en lo visual, realizada con Html + CSS y Bootstrap.',
+        project_6_title: 'Disquería Back',
+        project_6_description:
+            'Disquería online realizada en Node.js y MongoDB, incluye login y proceso de compra.',
         view_project: 'Ver Página',
         services_description:
             'Realizo páginas web dinámicas y responsivas, adaptadas a las necesidades del cliente. Las mismas pueden ser desde una tienda e-commerce a un portfolio personal. Hago mantenimiento mensual del código, corrección de errores, sumo nuevas funcionalidades. Readapto la página a tus necesidades actuales.',
@@ -74,6 +77,9 @@ const resources = {
         project_5_title: 'Caldén Pots',
         project_5_description:
             'Product showcase store with a focus on visuals, built with HTML + CSS and Bootstrap.',
+        project_6_title: 'Back Record Store',
+        project_6_description:
+            'Online record store created with Node.js and MongoDB, including a login system and a complete purchase process.',
         view_project: 'View Page',
         services_description:
             'I create dynamic and responsive websites tailored to the client’s needs, ranging from e-commerce stores to personal portfolios. I offer monthly code maintenance, bug fixes, and new feature additions. I adapt the website to your current needs.',
