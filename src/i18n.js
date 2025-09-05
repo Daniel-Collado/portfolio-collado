@@ -33,6 +33,9 @@ const resources = {
         project_6_title: 'Disquería Back',
         project_6_description:
             'Disquería online realizada en Node.js y MongoDB, incluye login y proceso de compra.',
+        project_7_title: 'Extractor de pdf',
+        project_7_description:
+            'Extrae números de facturas e importes de un pdf y exporta columnas y sumas en varios formatos.',
         view_project: 'Ver Página',
         services_description:
             'Realizo páginas web dinámicas y responsivas, adaptadas a las necesidades del cliente. Las mismas pueden ser desde una tienda e-commerce a un portfolio personal. Hago mantenimiento mensual del código, corrección de errores, sumo nuevas funcionalidades. Readapto la página a tus necesidades actuales.',
@@ -80,6 +83,9 @@ const resources = {
         project_6_title: 'Back Record Store',
         project_6_description:
             'Online record store created with Node.js and MongoDB, including a login system and a complete purchase process.',
+        project_7_title: 'Pdf Extractor',
+        project_7_description:
+            'Extracts invoice numbers and amounts from a PDF, and exports columns and totals in various formats.',
         view_project: 'View Page',
         services_description:
             'I create dynamic and responsive websites tailored to the client’s needs, ranging from e-commerce stores to personal portfolios. I offer monthly code maintenance, bug fixes, and new feature additions. I adapt the website to your current needs.',
