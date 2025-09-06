@@ -93,7 +93,6 @@ function App() {
             <StarryBackground />
             <div className="content-wrapper">
                 <Routes>
-                    {/* Ruta principal para el portafolio */}
                     <Route
                         path="/"
                         element={
@@ -103,27 +102,29 @@ function App() {
                                     activeSection={activeSection}
                                     className={`header ${isHeaderEntering ? 'header-entering' : ''}`}
                                 />
-                                {/* PortfolioContent se renderiza siempre. La visibilidad de las secciones se maneja internamente. */}
-                                <PortfolioContent
-                                    activeSection={activeSection}
-                                    scrollToTop={scrollToTop}
-                                    formData={formData}
-                                    status={status}
-                                    handleChange={handleChange}
-                                    handleSubmit={handleSubmit}
-                                />
+                                {activeSection !== null && (
+                                    <PortfolioContent
+                                        activeSection={activeSection}
+                                        setActiveSection={setActiveSection}
+                                        scrollToTop={scrollToTop}
+                                        formData={formData}
+                                        setFormData={setFormData}
+                                        status={status}
+                                        setStatus={setStatus}
+                                        handleChange={handleChange}
+                                        handleSubmit={handleSubmit}
+                                    />
+                                )}
                             </>
                         }
                     />
-                    
-                    {/* Ruta para el formulario de login del administrador */}
+                    {/* Ya no pasamos la prop handleLogin. */}
                     <Route path="/adminlogin" element={<AdminLogin />} />
 
-                    {/* Ruta protegida para el panel de administración */}
                     <Route
                         path="/admin"
                         element={
-                            // Si el usuario está autenticado, muestra el AdminPanel. De lo contrario, lo redirige al login.
+                            // La redirección ahora se basa en el estado de autenticación de Firebase
                             isAuthenticated ? <AdminPanel /> : <AdminLogin />
                         }
                     />
