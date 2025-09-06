@@ -1,8 +1,12 @@
+// src/App.jsx
+
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import emailjs from '@emailjs/browser';
 import { Routes, Route, useNavigate } from 'react-router-dom';
-import { getAuth, onAuthStateChanged } from 'firebase/auth'; // Importa getAuth y onAuthStateChanged
+import { onAuthStateChanged } from 'firebase/auth'; // Importa onAuthStateChanged
+import { auth } from './firebase'; // Importa la instancia de auth
+
 import AdminLogin from './components/AdminLogin.jsx';
 import AdminPanel from './components/AdminPanel.jsx';
 import Header from './components/Header.jsx';
@@ -10,14 +14,12 @@ import PortfolioContent from './components/PortfolioContent.jsx';
 import StarryBackground from './components/StarryBackground.jsx';
 import './index.css';
 
-
 function App() {
     const { t } = useTranslation();
     const [activeSection, setActiveSection] = useState(null);
     const [isHeaderEntering, setIsHeaderEntering] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado para la autenticación
     const navigate = useNavigate();
-    const auth = getAuth(); // Inicializa la autenticación
 
     // Escucha los cambios en el estado de autenticación de Firebase
     useEffect(() => {
@@ -25,16 +27,27 @@ function App() {
             if (user) {
                 // El usuario está autenticado, actualiza el estado
                 setIsAuthenticated(true);
+                // ¡IMPORTANTE!: Redirige al panel de administración si se loguea
+                navigate('/admin');
             } else {
-                // No hay usuario, actualiza el estado
+                // No hay usuario, actualiza el estado y redirige al login si no está allí
                 setIsAuthenticated(false);
+                if (window.location.pathname.startsWith('/admin')) {
+                    navigate('/adminlogin');
+                }
             }
         });
         // La función de limpieza se ejecuta cuando el componente se desmonta
         return () => unsubscribe();
-    }, [auth]);
+    }, [navigate]);
 
-    // La lógica de handleLogin ya no es necesaria aquí, se manejará en AdminLogin.jsx
+    // Estados y funciones del formulario de contacto
+    const [formData, setFormData] = useState({
+        from_name: '',
+        from_email: '',
+        message: '',
+    });
+    const [status, setStatus] = useState('');
 
     const scrollToTop = () => {
         setIsHeaderEntering(true);
@@ -49,13 +62,6 @@ function App() {
             }
         }, 15);
     };
-
-    const [formData, setFormData] = useState({
-        from_name: '',
-        from_email: '',
-        message: '',
-    });
-    const [status, setStatus] = useState('');
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -118,15 +124,10 @@ function App() {
                             </>
                         }
                     />
-                    {/* Ya no pasamos la prop handleLogin. */}
                     <Route path="/adminlogin" element={<AdminLogin />} />
-
                     <Route
                         path="/admin"
-                        element={
-                            // La redirección ahora se basa en el estado de autenticación de Firebase
-                            isAuthenticated ? <AdminPanel /> : <AdminLogin />
-                        }
+                        element={isAuthenticated ? <AdminPanel /> : <AdminLogin />}
                     />
                 </Routes>
             </div>
