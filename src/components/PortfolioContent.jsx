@@ -1,15 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+// Importamos la base de datos desde el nuevo archivo
+import { db } from '../firebase.js'; 
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 
-// PortfolioContent ahora recibe scrollToTop de App.jsx
-// Eliminamos setFormData y setStatus de la desestructuración de props, ya que se usan en App.jsx
-const PortfolioContent = ({ activeSection, setActiveSection, scrollToTop, formData, status, handleChange, handleSubmit }) => {
-    const { t } = useTranslation();
+const PortfolioContent = ({ activeSection, scrollToTop, formData, status, handleChange, handleSubmit }) => {
+    const { t, i18n } = useTranslation();
     const [showScrollTop, setShowScrollTop] = useState(false);
-    // titleKey se usa para forzar la re-renderización de la animación del título
+    const [projects, setProjects] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [titleKey, setTitleKey] = useState(0);
 
-    // Efecto para mostrar/ocultar el botón de "scroll to top"
+    // Efecto para obtener los proyectos de Firebase
+    useEffect(() => {
+        const fetchProjects = async () => {
+            setLoading(true);
+            try {
+                // Ahora usamos 'db' que fue importado
+                const q = query(collection(db, 'projects'), orderBy('created_at', 'desc'));
+                const querySnapshot = await getDocs(q);
+                const projectsArray = [];
+                querySnapshot.forEach((doc) => {
+                    projectsArray.push({ id: doc.id, ...doc.data() });
+                });
+                setProjects(projectsArray);
+                setError(null);
+            } catch (err) {
+                console.error("Error al obtener los proyectos: ", err);
+                setError("Error al cargar los proyectos.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProjects();
+    }, []); 
+
+    // ... el resto del código del componente PortfolioContent
     useEffect(() => {
         const handleScroll = () => {
             setShowScrollTop(window.scrollY > 100);
@@ -18,23 +46,20 @@ const PortfolioContent = ({ activeSection, setActiveSection, scrollToTop, formDa
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Efecto para desplazarse a la sección activa y animar su título
     useEffect(() => {
         if (activeSection) {
             const section = document.getElementById(activeSection);
             if (section) {
                 section.scrollIntoView({ behavior: 'smooth' });
             }
-            // Cambia la clave para forzar la animación del título cada vez que la sección activa cambia
             setTitleKey((prev) => prev + 1);
         }
-    }, [activeSection, setActiveSection]);
+    }, [activeSection]);
 
-    // formData, status, handleChange, y handleSubmit son props y se usan directamente en el JSX del formulario.
+    const currentLang = i18n.language;
 
     return (
         <main className="main-content">
-            {/* Sección SOBRE MÍ - Solo se renderiza si activeSection es 'sobre-mi' */}
             {activeSection === 'sobre-mi' && (
                 <section id="sobre-mi" className="section-container">
                     <h2 key={titleKey} className={`section-title ${activeSection === 'sobre-mi' ? 'animate-title' : ''}`}>
@@ -56,110 +81,37 @@ const PortfolioContent = ({ activeSection, setActiveSection, scrollToTop, formDa
                 </section>
             )}
 
-            {/* Sección PROYECTOS - Solo se renderiza si activeSection es 'proyectos' */}
             {activeSection === 'proyectos' && (
                 <section id="proyectos" className="section-container">
                     <h2 key={titleKey} className={`section-title ${activeSection === 'proyectos' ? 'animate-title' : ''}`}>
                         {t('projects')}
                     </h2>
                     <p className="section-text">{t('projects_description')}</p>
-                    <div className="projects-grid">
-                        <div className="project-card">
-                            <img src="/images/portfolio-juan-vogt.jpg" alt="Proyecto 1" className="project-image" />
-                            <h3 className="project-title">{t('project_1_title')}</h3>
-                            <p className="section-text mb-4">{t('project_1_description')}</p>
-                            <a
-                                href="https://www.juanpablovogt.com.ar/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="project-link"
-                            >
-                                {t('view_project')}
-                            </a>
+                    {loading && <p>Cargando proyectos...</p>}
+                    {error && <p>{error}</p>}
+                    {!loading && !error && (
+                        <div className="projects-grid">
+                            {projects.map((project) => (
+                                <div className="project-card" key={project.id}>
+                                    <img src={project.image_url} alt={project[`title_${currentLang}`]} className="project-image" />
+                                    <h3 className="project-title">{project[`title_${currentLang}`]}</h3>
+                                    <p className="section-text mb-4">{project[`description_${currentLang}`]}</p>
+                                    <a
+                                        href={project.project_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="project-link"
+                                    >
+                                        {t('view_project')}
+                                    </a>
+                                </div>
+                            ))}
                         </div>
-                        <div className="project-card">
-                            <img src="/images/oestecursos.jpg" alt="Proyecto 2" className="project-image" />
-                            <h3 className="project-title">{t('project_2_title')}</h3>
-                            <p className="section-text mb-4">{t('project_2_description')}</p>
-                            <a
-                                href="https://oestecursos.onrender.com/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="project-link"
-                            >
-                                {t('view_project')}
-                            </a>
-                        </div>
-                        <div className="project-card">
-                            <img src="/images/Tienda-ecommerce.png" alt="Proyecto 3" className="project-image" />
-                            <h3 className="project-title">{t('project_3_title')}</h3>
-                            <p className="section-text mb-4">{t('project_3_description')}</p>
-                            <a
-                                href="https://tienda-jardin-olmos.vercel.app/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="project-link"
-                            >
-                                {t('view_project')}
-                            </a>
-                        </div>
-                        <div className="project-card">
-                            <img src="/images/Tienda-javascript.png" alt="Proyecto 4" className="project-image" />
-                            <h3 className="project-title">{t('project_4_title')}</h3>
-                            <p className="section-text mb-4">{t('project_4_description')}</p>
-                            <a
-                                href="https://daniel-collado.github.io/JavaScript-Coder-2/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="project-link"
-                            >
-                                {t('view_project')}
-                            </a>
-                        </div>
-                        <div className="project-card">
-                            <img src="/images/Tienda-Html-y-CSS.png" alt="Proyecto 5" className="project-image" />
-                            <h3 className="project-title">{t('project_5_title')}</h3>
-                            <p className="section-text mb-4">{t('project_5_description')}</p>
-                            <a
-                                href="https://daniel-collado.github.io/CH-DW-Tercera-Entrega/index.html"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="project-link"
-                            >
-                                {t('view_project')}
-                            </a>
-                        </div>
-                        <div className="project-card">
-                            <img src="/images/disqueria.jpg" alt="Proyecto 6" className="project-image" />
-                            <h3 className="project-title">{t('project_6_title')}</h3>
-                            <p className="section-text mb-4">{t('project_6_description')}</p>
-                            <a
-                                href="https://disqueriaback.vercel.app/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="project-link"
-                            >
-                                {t('view_project')}
-                            </a>
-                        </div>
-                        <div className="project-card">
-                            <img src="/images/extractor.png" alt="Proyecto 7" className="project-image" />
-                            <h3 className="project-title">{t('project_7_title')}</h3>
-                            <p className="section-text mb-4">{t('project_7_description')}</p>
-                            <a
-                                href="https://pdf-extractor-1-3n9h.onrender.com/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="project-link"
-                            >
-                                {t('view_project')}
-                            </a>
-                        </div>
-                    </div>
+                    )}
                 </section>
             )}
 
-            {/* Sección SERVICIOS - Solo se renderiza si activeSection es 'servicios' */}
+            {/* Sección SERVICIOS */}
             {activeSection === 'servicios' && (
                 <section id="servicios" className="section-container">
                     <h2 key={titleKey} className={`section-title ${activeSection === 'servicios' ? 'animate-title' : ''}`}>
@@ -169,15 +121,14 @@ const PortfolioContent = ({ activeSection, setActiveSection, scrollToTop, formDa
                 </section>
             )}
 
-            {/* Sección CONTACTO - Solo se renderiza si activeSection es 'contacto' */}
+            {/* Sección CONTACTO */}
             {activeSection === 'contacto' && (
                 <section id="contacto" className="section-container">
                     <h2 key={titleKey} className={`section-title ${activeSection === 'contacto' ? 'animate-title' : ''}`}>
                         {t('contact')}
                     </h2>
                     <div className="contact-content">
-                        <p className="section-text email-section"
-                            style={{ marginTop: '5px', marginBottom: '5px' }}>
+                        <p className="section-text email-section" style={{ marginTop: '5px', marginBottom: '5px' }}>
                             <strong>{t('email_label')}</strong>
                             <a href="mailto:danielcolladodev@gmail.com" className="email-link">
                                 <i className="fas fa-envelope email-icon"></i>
@@ -230,14 +181,13 @@ const PortfolioContent = ({ activeSection, setActiveSection, scrollToTop, formDa
                 </section>
             )}
 
-            {/* Botón de "Scroll to Top" */}
             {showScrollTop && (
                 <button
                     className={`scroll-top-button ${showScrollTop ? 'visible' : ''}`}
-                    onClick={scrollToTop} // Llama a la función scrollToTop de App.jsx
+                    onClick={scrollToTop}
                     aria-label="Volver al inicio"
                 >
-                    <i className="fas fa-arrow-up"></i> {/* Usé "fas fa-arrow-up" para Font Awesome */}
+                    <i className="fas fa-arrow-up"></i>
                 </button>
             )}
         </main>

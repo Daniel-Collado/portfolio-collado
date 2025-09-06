@@ -1,23 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import emailjs from '@emailjs/browser';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import { getAuth, onAuthStateChanged } from 'firebase/auth'; // Importa getAuth y onAuthStateChanged
+import AdminLogin from './components/AdminLogin.jsx';
+import AdminPanel from './components/AdminPanel.jsx';
 import Header from './components/Header.jsx';
 import PortfolioContent from './components/PortfolioContent.jsx';
 import StarryBackground from './components/StarryBackground.jsx';
 import './index.css';
 
+
 function App() {
     const { t } = useTranslation();
     const [activeSection, setActiveSection] = useState(null);
     const [isHeaderEntering, setIsHeaderEntering] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado para la autenticación
+    const navigate = useNavigate();
+    const auth = getAuth(); // Inicializa la autenticación
 
-    // Estados y funciones del formulario de contacto
-    const [formData, setFormData] = useState({
-        from_name: '',
-        from_email: '',
-        message: '',
-    });
-    const [status, setStatus] = useState('');
+    // Escucha los cambios en el estado de autenticación de Firebase
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // El usuario está autenticado, actualiza el estado
+                setIsAuthenticated(true);
+            } else {
+                // No hay usuario, actualiza el estado
+                setIsAuthenticated(false);
+            }
+        });
+        // La función de limpieza se ejecuta cuando el componente se desmonta
+        return () => unsubscribe();
+    }, [auth]);
+
+    // La lógica de handleLogin ya no es necesaria aquí, se manejará en AdminLogin.jsx
 
     const scrollToTop = () => {
         setIsHeaderEntering(true);
@@ -32,6 +49,13 @@ function App() {
             }
         }, 15);
     };
+
+    const [formData, setFormData] = useState({
+        from_name: '',
+        from_email: '',
+        message: '',
+    });
+    const [status, setStatus] = useState('');
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -57,49 +81,54 @@ function App() {
             .then(
                 () => {
                     setStatus(t('form_success'));
-                    setFormData({ from_name: '', from_email: '', message: '' });
                 },
-                (error) => {
-                    console.error('Error de EmailJS:', error.text, error);
+                () => {
                     setStatus(t('form_error'));
                 }
-            )
-            .catch((error) => {
-                console.error('Excepción no manejada:', error);
-                setStatus(t('form_error'));
-            });
+            );
     };
-
-    // Ya NO necesitamos la lógica para los cometas aquí (numberOfComets, cometsArray)
 
     return (
         <div className="app">
-            {/* Renderiza el fondo de estrellas (que ahora es estático y sin cometas) */}
             <StarryBackground />
-            {/* Ya NO renderizamos los cometas aquí */}
-
-            {/* content-wrapper ahora gestiona el centrado vertical */}
             <div className="content-wrapper">
-                {/* El Header siempre se renderiza */}
-                <Header
-                    setActiveSection={setActiveSection}
-                    activeSection={activeSection}
-                    className={`header ${isHeaderEntering ? 'header-entering' : ''}`}
-                />
-                {/* PortfolioContent solo se renderiza si hay una sección activa */}
-                {activeSection !== null && (
-                    <PortfolioContent
-                        activeSection={activeSection}
-                        setActiveSection={setActiveSection}
-                        scrollToTop={scrollToTop}
-                        formData={formData}
-                        setFormData={setFormData}
-                        status={status}
-                        setStatus={setStatus}
-                        handleChange={handleChange}
-                        handleSubmit={handleSubmit}
+                <Routes>
+                    <Route
+                        path="/"
+                        element={
+                            <>
+                                <Header
+                                    setActiveSection={setActiveSection}
+                                    activeSection={activeSection}
+                                    className={`header ${isHeaderEntering ? 'header-entering' : ''}`}
+                                />
+                                {activeSection !== null && (
+                                    <PortfolioContent
+                                        activeSection={activeSection}
+                                        setActiveSection={setActiveSection}
+                                        scrollToTop={scrollToTop}
+                                        formData={formData}
+                                        setFormData={setFormData}
+                                        status={status}
+                                        setStatus={setStatus}
+                                        handleChange={handleChange}
+                                        handleSubmit={handleSubmit}
+                                    />
+                                )}
+                            </>
+                        }
                     />
-                )}
+                    {/* Ya no pasamos la prop handleLogin. */}
+                    <Route path="/adminlogin" element={<AdminLogin />} />
+
+                    <Route
+                        path="/admin"
+                        element={
+                            // La redirección ahora se basa en el estado de autenticación de Firebase
+                            isAuthenticated ? <AdminPanel /> : <AdminLogin />
+                        }
+                    />
+                </Routes>
             </div>
         </div>
     );

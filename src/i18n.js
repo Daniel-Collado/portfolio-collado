@@ -15,27 +15,7 @@ const resources = {
         education: 'Formación:',
         education_details: '2022 - presente // Coderhouse, Potrero Digital, Argentina Programa.',
         projects_description: 'Aquí están algunos de mis trabajos más recientes:',
-        project_1_title: 'Juan Pablo Vogt Portfolio',
-        project_1_description:
-            'El portfolio se trabajó a partir de un concepto minimalista. Está realizado con React + Vite.',
-        project_2_title: 'Oeste Cursos',
-        project_2_description:
-            'Plataforma de cursos online con login de usuarios y contenido pregrabado.',
-        project_3_title: 'Tienda Jardín Olmos',
-        project_3_description:
-            'Tienda e-commerce realizada con React + Vite, con Mercado Pago integrado.',
-        project_4_title: 'Tienda Javascript',
-        project_4_description:
-            'Tienda e-commerce realizada en JavaScript, con carrito de compras.',
-        project_5_title: 'Caldén Macetas',
-        project_5_description:
-            'Tienda de muestra de productos con énfasis en lo visual, realizada con Html + CSS y Bootstrap.',
-        project_6_title: 'Disquería Back',
-        project_6_description:
-            'Disquería online realizada en Node.js y MongoDB, incluye login y proceso de compra.',
-        project_7_title: 'Extractor de pdf',
-        project_7_description:
-            'Extrae números de facturas e importes de un pdf y exporta columnas y sumas en varios formatos.',
+        
         view_project: 'Ver Página',
         services_description:
             'Realizo páginas web dinámicas y responsivas, adaptadas a las necesidades del cliente. Las mismas pueden ser desde una tienda e-commerce a un portfolio personal. Hago mantenimiento mensual del código, corrección de errores, sumo nuevas funcionalidades. Readapto la página a tus necesidades actuales.',
@@ -65,27 +45,7 @@ const resources = {
         education: 'Education:',
         education_details: '2022 - present // Coderhouse, Potrero Digital, Argentina Programa.',
         projects_description: 'Here are some of my most recent works:',
-        project_1_title: 'Juan Pablo Vogt Portfolio',
-        project_1_description:
-            'The portfolio was created from a minimalist concept, using React + Vite.',
-        project_2_title: 'West Courses',
-        project_2_description:
-            'Online course platform with user login and pre-recorded content.',
-        project_3_title: 'Olmos Garden Store',
-        project_3_description:
-            'E-commerce store built with React + Vite, integrated with Mercado Pago.',
-        project_4_title: 'Javascript Store',
-        project_4_description:
-            'E-commerce store built in JavaScript, with a shopping cart.',
-        project_5_title: 'Caldén Pots',
-        project_5_description:
-            'Product showcase store with a focus on visuals, built with HTML + CSS and Bootstrap.',
-        project_6_title: 'Back Record Store',
-        project_6_description:
-            'Online record store created with Node.js and MongoDB, including a login system and a complete purchase process.',
-        project_7_title: 'Pdf Extractor',
-        project_7_description:
-            'Extracts invoice numbers and amounts from a PDF, and exports columns and totals in various formats.',
+        
         view_project: 'View Page',
         services_description:
             'I create dynamic and responsive websites tailored to the client’s needs, ranging from e-commerce stores to personal portfolios. I offer monthly code maintenance, bug fixes, and new feature additions. I adapt the website to your current needs.',
