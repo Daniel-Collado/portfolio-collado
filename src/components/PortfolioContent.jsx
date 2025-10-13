@@ -118,25 +118,37 @@ const PortfolioContent = ({
                 <div className="projects-grid">
                 {projects.map((project) => (
                     <div className="project-card" key={project.id}>
-                    <img
-                        src={project.image_url}
-                        alt={project[`title_${currentLang}`] || ''}
-                        className="project-image"
-                    />
-                    <h3 className="project-title">
-                        {project[`title_${currentLang}`] || 'Sin título'}
-                    </h3>
-                    <p className="section-text mb-4">
-                        {project[`description_${currentLang}`] || ''}
-                    </p>
-                    <a
-                        href={project.project_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="project-link"
-                    >
-                        {t('view_project')}
-                    </a>
+                        <img
+                            src={project.image_url}
+                            alt={project[`title_${currentLang}`] || ''}
+                            className="project-image"
+                        />
+                        <h3 className="project-title">
+                            {project[`title_${currentLang}`] || 'Sin título'}
+                        </h3>
+                        <p className="section-text mb-4">
+                            {project[`description_${currentLang}`] || ''}
+                        </p>
+                        <a
+                            href={project.project_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="project-link"
+                        >
+                            {t('view_project')}
+                        </a>
+                        {project.github_url && (
+                            <a
+                                href={project.github_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="project-link github"
+                                aria-label="GitHub"
+                            >
+                                <i className="fab fa-github"></i>
+                            </a>
+                        )}
+
                     </div>
                 ))}
                 </div>

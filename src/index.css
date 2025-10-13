@@ -273,6 +273,25 @@ body {
   color: #000000;
 }
 
+/* Estilo circular minimalista para el botón de GitHub */
+.project-link.github {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.5rem;
+  width: 36px;
+  height: 36px;
+  font-size: 1.1rem;
+  border-radius: 50%;
+  padding: 0;
+}
+
+/*.project-link.github:hover {
+  background-color: #24292f;
+  color: #ffffff;
+}*/
+
+
 /* Estilos para el botón de "Scroll to Top" */
 .scroll-top-button {
   position: fixed;

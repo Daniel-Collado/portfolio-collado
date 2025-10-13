@@ -17,6 +17,7 @@ const resources = {
         '2022 - presente // Coderhouse, Potrero Digital, Argentina Programa.',
       projects_description: 'Aquí están algunos de mis trabajos más recientes:',
       view_project: 'Ver Página',
+      view_code: 'Código',
       services_description:
         'Realizo páginas web dinámicas y responsivas, adaptadas a las necesidades del cliente. Las mismas pueden ser desde una tienda e-commerce a un portfolio personal. Hago mantenimiento mensual del código, corrección de errores, sumo nuevas funcionalidades. Readapto la página a tus necesidades actuales.',
       email_label: 'Correo:',
@@ -47,6 +48,7 @@ const resources = {
         '2022 - present // Coderhouse, Potrero Digital, Argentina Programa.',
       projects_description: 'Here are some of my most recent works:',
       view_project: 'View Page',
+      view_code: 'Code',
       services_description:
         'I create dynamic and responsive websites tailored to the client’s needs, ranging from e-commerce stores to personal portfolios. I offer monthly code maintenance, bug fixes, and new feature additions. I adapt the website to your current needs.',
       email_label: 'Email:',

@@ -17,6 +17,7 @@ const AdminPanel = () => {
         description_es: '',
         description_en: '',
         project_url: '',
+        github_url: '',
     });
     const [imageFile, setImageFile] = useState(null);
     const [status, setStatus] = useState('');
@@ -101,6 +102,7 @@ const AdminPanel = () => {
             description_es: project.description_es,
             description_en: project.description_en,
             project_url: project.project_url,
+            github_url: project.github_url || '',
         });
         setImageFile(null); // Limpiamos la imagen para que el usuario suba una nueva si lo desea
     };
@@ -113,6 +115,7 @@ const AdminPanel = () => {
             description_es: '',
             description_en: '',
             project_url: '',
+            github_url: '',
         });
         setImageFile(null);
         setStatus('');
@@ -202,6 +205,11 @@ const AdminPanel = () => {
                     <label>URL del Proyecto:</label>
                     <input type="url" name="project_url" value={projectData.project_url} onChange={handleChange} required className="admin-input" />
                 </div>
+                <div className="form-group">
+                    <label>URL del Repositorio (GitHub):</label>
+                    <input type="url" name="github_url" value={projectData.github_url || ''} onChange={handleChange} placeholder="https://github.com/usuario/repositorio" className="admin-input" />
+                    </div>
+
                 <div className="form-group">
                     <label htmlFor="file-upload" className="custom-file-upload admin-button">
                         {imageFile ? imageFile.name : (editingProject ? 'Seleccionar Nueva Imagen' : 'Seleccionar Imagen')}
