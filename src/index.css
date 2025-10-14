@@ -45,7 +45,7 @@ body {
 
 .header-title {
   font-family: "Frank Ruhl Libre", serif;
-  font-size: 3rem;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
   font-weight: 700;
   color: #ffffff;
   margin-bottom: 1rem;
@@ -53,7 +53,7 @@ body {
 
 .header-text {
   font-family: 'Gambarino', sans-serif;
-  font-size: 1.5rem;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
   color: rgba(255, 255, 255, 0.8);
   margin-top: 0.5rem;
   margin-bottom: 2rem;
@@ -67,12 +67,12 @@ body {
 }
 
 .nav-button {
-  padding: 0.55rem 1.2rem;
+  padding: clamp(0.4rem, 0.8vw, 0.55rem) clamp(0.8rem, 1.6vw, 1.2rem);
   border-radius: 9999px;
   background-color: #ffffff;
   color: #000000;
   font-family: "Frank Ruhl Libre", serif;
-  font-size: .9rem;
+  font-size: clamp(0.8rem, 1.2vw, 0.9rem);
   font-weight: 500;
   border: none;
   cursor: pointer;
@@ -83,6 +83,7 @@ body {
   background-color: #D3D3D3;
   color: #000000;
 }
+
 
 /* Estilos para el botón de navegación activo */
 .nav-button.active {
@@ -134,10 +135,9 @@ body {
   display: none;
 }
 
-
 .section-title {
   font-family: "Frank Ruhl Libre", serif;
-  font-size: 2.25rem;
+  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
   font-weight: 700;
   color: #ffffff;
   margin-bottom: 1.5rem;
@@ -146,7 +146,7 @@ body {
 
 .section-text {
   font-family: 'Gambarino', sans-serif;
-  font-size: 1.125rem;
+  font-size: clamp(0.95rem, 1.4vw, 1.05rem);
   color: rgba(255, 255, 255, 0.8);
   text-align: center;
 }
@@ -241,7 +241,7 @@ body {
 
 .project-title {
   font-family: "Frank Ruhl Libre", serif;
-  font-size: 1.25rem;
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
   font-weight: 700;
   color: #ffffff;
   margin-bottom: 0.5rem;
@@ -255,14 +255,17 @@ body {
   margin-bottom: 1rem;
 }
 
+/* --- Botones de proyectos adaptables --- */
 .project-link {
-  display: inline-block;
-  padding: 0.5rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.9rem;
   border-radius: 9999px;
   background-color: #ffffff;
   color: #000000;
   font-family: "Frank Ruhl Libre", serif;
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 1.2vw, 0.9rem);
   font-weight: 500;
   text-decoration: none;
   transition: all 0.3s ease;
@@ -273,40 +276,58 @@ body {
   color: #000000;
 }
 
-/* Estilo circular minimalista para el botón de GitHub */
+/* --- Estilo circular + tooltip GitHub --- */
 .project-link.github {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-left: 0.5rem;
-  width: 36px;
-  height: 36px;
-  font-size: 1.1rem;
+  margin-left: 0.4rem;
+  width: clamp(30px, 2.8vw, 36px);
+  height: clamp(30px, 2.8vw, 36px);
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
   border-radius: 50%;
   padding: 0;
 }
 
-/*.project-link.github:hover {
-  background-color: #24292f;
-  color: #ffffff;
-}*/
+.project-link.github::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
 
+.project-link.github:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -4px);
+}
 
-/* Estilos para el botón de "Scroll to Top" */
 .scroll-top-button {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: clamp(15px, 2vw, 20px);
+  right: clamp(15px, 2vw, 20px);
   background-color: #008b8e;
   color: #ffffff;
   border: none;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: clamp(32px, 4vw, 40px);
+  height: clamp(32px, 4vw, 40px);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
+  font-size: clamp(0.9rem, 1.6vw, 1.2rem);
   cursor: pointer;
   opacity: 0;
   visibility: hidden;
@@ -322,103 +343,46 @@ body {
   transform: translateY(0);
 }
 
-/* Animación para los títulos de sección */
+
+/* Animación para títulos */
 @keyframes fadeInSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .animate-title {
   animation: fadeInSlideUp 0.8s ease-out forwards;
 }
 
-/* Clase para la animación del header al entrar */
 .header-entering {
   opacity: 0;
   transition: opacity 0.5s ease;
 }
 
-
-/* Responsividad */
-@media (min-width: 768px) {
-  .header-title {
-    font-size: 4.5rem;
+/* Ajustes responsivos */
+@media (max-width: 1440px) {
+  .header {
+    padding: 1.5rem;
   }
-
-  .header-text {
-    font-size: 1.75rem;
+  .header-nav {
+    gap: 0.8rem;
   }
-
-  .section-title {
-    font-size: 2.5rem;
-  }
-  
-  .section-text {
-    font-size: 1.125rem; /* Ajuste para mantener la proporción */
-  }
-
-  .profile-image {
-    width: 14rem;
-    height: 18rem;
-  }
-
-  .text-content {
-    text-align: center;
-    max-width: 40rem;
-  }
-
-  .projects-grid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  }
+  .header-title { font-size: 3.5rem; }
+  .header-text { font-size: 1.3rem; }
+  .section-title { font-size: 2rem; }
+  .section-text { font-size: 1rem; }
+  .project-card { padding: 1.2rem; }
 }
 
 @media (max-width: 768px) {
-  .header {
-    padding: 20px 10px;
-  }
-
-  .header-title {
-    font-size: 2.5rem;
-  }
-
-  .header-text {
-    font-size: 1.25rem;
-  }
-
-  .header-nav {
-    gap: 0.5rem;
-  }
-
-  .nav-button {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-  }
-  
-  .section-title {
-    font-size: 2rem; /* Tamaño de título más pequeño para móviles */
-  }
-
-  .section-text {
-    font-size: 1rem; /* Tamaño de texto de sección más pequeño para móviles */
-  }
-
-  .projects-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .project-card {
-    padding: 1rem;
-  }
-
-  .project-link {
-    font-size: 0.8rem;
-    padding: 0.4rem 0.8rem;
+  .header { padding: 20px 10px; }
+  .header-title { font-size: 2.2rem; }
+  .header-text { font-size: 1.1rem; }
+  .section-title { font-size: 1.6rem; }
+  .section-text { font-size: 0.95rem; }
+  .project-link { font-size: 0.8rem; padding: 0.4rem 0.7rem; }
+  .project-link.github {
+    width: 30px; height: 30px; font-size: 1rem;
   }
 }
 
@@ -429,7 +393,7 @@ body {
 }
 
 .language-switcher button {
-  padding: 8px 12px;
+  padding: clamp(0.4rem, 0.8vw, 0.55rem) clamp(0.6rem, 1.2vw, 0.75rem);
   margin-left: 5px;
   border: none;
   background-color: #ffffff;
@@ -437,12 +401,13 @@ body {
   cursor: pointer;
   border-radius: 4px;
   font-family: "Frank Ruhl Libre", serif;
-  font-size: 0.9rem;
-  transition: background-color 0.3s;
+  font-size: clamp(0.75rem, 1vw, 0.9rem);
+  transition: background-color 0.3s, transform 0.2s ease;
 }
 
 .language-switcher button:hover {
   background-color: #008b8e;
+  transform: scale(1.05);
 }
 
 .language-switcher button.active {
@@ -450,6 +415,7 @@ body {
   color: #ffffff;
 }
 
+/* Contacto y formularios */
 .contact-form {
   display: flex;
   flex-direction: column;
@@ -471,6 +437,7 @@ body {
   color: #ffffff;
 }
 
+
 .form-group input,
 .form-group textarea {
   padding: 0.75rem;
@@ -485,22 +452,17 @@ body {
 }
 
 .form-group input:focus,
-.form-group textarea:focus {
-  border-color: #2bffff;
-}
+.form-group textarea:focus { border-color: #2bffff; }
 
-.form-group textarea {
-  resize: vertical;
-  min-height: 100px;
-}
+.form-group textarea { resize: vertical; min-height: 100px; }
 
 .form-submit {
-  padding: 0.55rem 1.2rem;
+  padding: clamp(0.4rem, 0.8vw, 0.55rem) clamp(0.8rem, 1.6vw, 1.2rem);
   border-radius: 9999px;
   background-color: #ffffff;
   color: #000000;
   font-family: "Frank Ruhl Libre", serif;
-  font-size: .9rem;
+  font-size: clamp(0.8rem, 1.2vw, 0.9rem);
   font-weight: 500;
   border: none;
   cursor: pointer;
@@ -508,9 +470,7 @@ body {
   align-self: center;
 }
 
-.form-submit:hover {
-  background-color: #2bffff;
-}
+.form-submit:hover { background-color: #2bffff; }
 
 .form-status {
   font-family: 'Gambarino', sans-serif;
@@ -519,6 +479,4 @@ body {
   text-align: center;
 }
 
-.contact-content .section-text.mb-4 {
-  margin-bottom: 0.3rem;
-}
+.contact-content .section-text.mb-4 { margin-bottom: 0.3rem; }

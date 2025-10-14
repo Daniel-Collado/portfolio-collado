@@ -143,7 +143,8 @@ const PortfolioContent = ({
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="project-link github"
-                                aria-label="GitHub"
+                                aria-label={t('view_code')}
+                                data-tooltip={t('view_code')}
                             >
                                 <i className="fab fa-github"></i>
                             </a>
