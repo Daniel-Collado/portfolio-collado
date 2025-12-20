@@ -1,0 +1,11 @@
+# Indica que estas reglas se aplican a todos los buscadores
+User-agent: *
+
+# No indexar el panel de administración
+Disallow: /adminlogin
+
+# Permite que se indexe todo el contenido
+Allow: /
+
+# Indica la ubicación de tu sitemap para ayudar a la indexación
+Sitemap: https://www.danielcolladodev.com.ar/sitemap.xml
