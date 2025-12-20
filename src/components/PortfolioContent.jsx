@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { db } from '../firebase.js'; 
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { FaGithub, FaEnvelope, FaArrowUp } from "react-icons/fa";
+
 
 const PortfolioContent = ({
     activeSection,
@@ -146,7 +148,7 @@ const PortfolioContent = ({
                                 aria-label={t('view_code')}
                                 data-tooltip={t('view_code')}
                             >
-                                <i className="fab fa-github"></i>
+                                <FaGithub />
                             </a>
                         )}
 
@@ -193,7 +195,7 @@ const PortfolioContent = ({
                     href="mailto:danielcolladodev@gmail.com"
                     className="email-link"
                 >
-                    <i className="fas fa-envelope email-icon"></i>
+                    <FaEnvelope className="email-icon" />
                     danielcolladodev@gmail.com
                 </a>
                 </p>
@@ -252,7 +254,7 @@ const PortfolioContent = ({
             onClick={scrollToTop}
             aria-label="Volver al inicio"
             >
-            <i className="fas fa-arrow-up"></i>
+            <FaArrowUp />
             </button>
         )}
         </main>
