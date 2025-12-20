@@ -1,6 +1,6 @@
-import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+// src/firebase.js
+// Lazy Firebase loader: no inicializa Firebase hasta que alguien lo pida.
+// Esto evita que Firebase se cargue en la HOME.
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -12,9 +12,40 @@ const firebaseConfig = {
     measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-// Inicializa Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+let _appPromise = null;
+let _authPromise = null;
+let _dbPromise = null;
 
-export { db, auth };
+async function getApp() {
+    if (!_appPromise) {
+        _appPromise = (async () => {
+        const { initializeApp, getApps, getApp } = await import("firebase/app");
+        // Evita reinicializar si ya existe
+        const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+        return app;
+        })();
+    }
+    return _appPromise;
+}
+
+export async function getAuth() {
+    if (!_authPromise) {
+        _authPromise = (async () => {
+        const app = await getApp();
+        const { getAuth } = await import("firebase/auth");
+        return getAuth(app);
+        })();
+    }
+    return _authPromise;
+}
+
+export async function getDb() {
+    if (!_dbPromise) {
+        _dbPromise = (async () => {
+        const app = await getApp();
+        const { getFirestore } = await import("firebase/firestore");
+        return getFirestore(app);
+        })();
+    }
+    return _dbPromise;
+}
