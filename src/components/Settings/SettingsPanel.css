@@ -1,0 +1,149 @@
+/* ===== OVERLAY ===== */
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  z-index: 900;
+}
+
+/* ===== PANEL ===== */
+.settings-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 360px;
+  max-width: 90vw;
+  height: 100vh;
+  background: linear-gradient(
+    145deg,
+    rgba(15, 23, 42, 0.98),
+    rgba(15, 23, 42, 0.92)
+  );
+  color: var(--text-color);
+  padding: 28px 24px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: -12px 0 35px rgba(0, 0, 0, 0.45);
+  border-left: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+/* En modo claro: panel más suave */
+:root:not(.dark) .settings-panel {
+  background: linear-gradient(
+    145deg,
+    rgba(248, 250, 252, 0.98),
+    rgba(241, 245, 249, 0.96)
+  );
+  border-left: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+/* ===== TÍTULO ===== */
+.settings-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+}
+
+/* ===== SECCIONES ===== */
+.settings-section {
+  padding: 12px 0;
+  border-top: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.settings-section:first-of-type {
+  border-top: none;
+  padding-top: 4px;
+}
+
+.settings-section h4 {
+  margin: 0 0 10px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+/* ===== OPCIONES ===== */
+.settings-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Etiquetas pequeñas */
+.settings-option span {
+  font-size: 0.9rem;
+}
+
+/* ===== BOTONES DEL PANEL ===== */
+.settings-panel button {
+  background: var(--accent-color);
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.settings-panel button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(15, 148, 170, 0.4);
+  opacity: 0.95;
+}
+
+/* Botones +/- más pequeños */
+.settings-section:nth-of-type(3) .settings-option button {
+  padding: 6px 10px;
+}
+
+/* ===== SELECT ===== */
+.settings-panel select {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--text-color);
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  outline: none;
+  font-size: 0.9rem;
+}
+
+:root:not(.dark) .settings-panel select {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* ===== BOTÓN ⚙ FIJO ===== */
+.settings-button {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 1500;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  color: #e5e7eb;
+  padding: 9px 11px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+:root:not(.dark) .settings-button {
+  background: rgba(255, 255, 255, 0.95);
+  color: #111827;
+  border-color: rgba(148, 163, 184, 0.8);
+}
+
+.settings-button:hover {
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.5);
+}

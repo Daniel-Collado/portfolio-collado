@@ -1,25 +1,34 @@
 // src/App.jsx
 
-import React, { useEffect, useState, Suspense, lazy } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import emailjs from "@emailjs/browser";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import Header from "./components/Header.jsx";
 import PortfolioContent from "./components/PortfolioContent.jsx";
-import StarryBackground from "./components/StarryBackground.jsx";
+import GradientBackground from "./components/GradientBackground.jsx";
+
+import SettingsPanel from "./components/Settings/SettingsPanel.jsx";
+import SettingsButton from "./components/Settings/SettingsButton.jsx";
+
+import { AnimatePresence } from "framer-motion";
+import { useTheme } from "./hooks/useTheme";
+import { useFontSize } from "./hooks/useFontSize";
+import { useBackgroundAnimation } from "./hooks/useBackgroundAnimation";
+
 import "./index.css";
 
-// Lazy-load: estos chunks no se descargan en la HOME
-const AdminLogin = lazy(() => import("./components/AdminLogin.jsx"));
-const AdminPanel = lazy(() => import("./components/AdminPanel.jsx"));
+// Lazy-load admin modules
+const AdminLogin = React.lazy(() => import("./components/AdminLogin.jsx"));
+const AdminPanel = React.lazy(() => import("./components/AdminPanel.jsx"));
 
 function RequireAuth({ children }) {
     const location = useLocation();
-    const [state, setState] = useState({ status: "loading", user: null });
+    const [authState, setAuthState] = useState({ status: "loading", user: null });
 
     useEffect(() => {
-        let unsubscribe = null;
+        let unsubscribe;
 
         (async () => {
         try {
@@ -28,12 +37,14 @@ function RequireAuth({ children }) {
             const auth = await getAuth();
 
             unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) setState({ status: "authed", user });
-            else setState({ status: "guest", user: null });
+            if (user) {
+                setAuthState({ status: "authed", user });
+            } else {
+                setAuthState({ status: "guest", user: null });
+            }
             });
-        } catch (e) {
-            // Si algo falla, tratamos como guest para no “romper” el sitio
-            setState({ status: "guest", user: null });
+        } catch {
+            setAuthState({ status: "guest", user: null });
         }
         })();
 
@@ -42,12 +53,11 @@ function RequireAuth({ children }) {
         };
     }, []);
 
-    if (state.status === "loading") {
-        // Mantenerlo minimalista para no afectar LCP en /admin tampoco
-        return <div style={{ color: "#fff", padding: "2rem" }}>Cargando…</div>;
+    if (authState.status === "loading") {
+        return <div className="loading-screen">Cargando...</div>;
     }
 
-    if (state.status === "guest") {
+    if (authState.status === "guest") {
         return <Navigate to="/adminlogin" replace state={{ from: location }} />;
     }
 
@@ -57,10 +67,11 @@ function RequireAuth({ children }) {
 function App() {
     const { t } = useTranslation();
 
+    // Estado de secciones del portfolio
     const [activeSection, setActiveSection] = useState(null);
     const [isHeaderEntering, setIsHeaderEntering] = useState(false);
 
-    // Form contacto
+    // Contact form
     const [formData, setFormData] = useState({
         from_name: "",
         from_email: "",
@@ -68,9 +79,21 @@ function App() {
     });
     const [status, setStatus] = useState("");
 
+    // Hooks de configuración
+    const themeHook = useTheme();
+    const fontHook = useFontSize();
+    const bgHook = useBackgroundAnimation();
+
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+    // Scroll suave personalizado
     const scrollToTop = () => {
         setIsHeaderEntering(true);
-        const scrollStep = -window.scrollY / (800 / 15);
+
+        const totalDuration = 800;
+        const intervalDelay = 15;
+        const scrollStep = -window.scrollY / (totalDuration / intervalDelay);
+
         const scrollInterval = setInterval(() => {
         if (window.scrollY !== 0) {
             window.scrollBy(0, scrollStep);
@@ -79,11 +102,15 @@ function App() {
             setActiveSection(null);
             setIsHeaderEntering(false);
         }
-        }, 15);
+        }, intervalDelay);
     };
 
+    // Manejo del formulario
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        setFormData((prev) => ({
+        ...prev,
+        [e.target.name]: e.target.value,
+        }));
     };
 
     const handleSubmit = (e) => {
@@ -93,6 +120,7 @@ function App() {
         setStatus(t("form_error_missing_fields"));
         return;
         }
+
         if (!/\S+@\S+\.\S+/.test(formData.from_email)) {
         setStatus(t("form_error_invalid_email"));
         return;
@@ -113,29 +141,35 @@ function App() {
 
     return (
         <div className="app">
-        <StarryBackground />
+        {/* Fondo global */}
+        <GradientBackground />
+
+        {/* Botón de configuración fijo arriba a la derecha (Opción A) */}
+        <SettingsButton onClick={() => setIsSettingsOpen(true)} />
+
         <div className="content-wrapper">
-            <Suspense fallback={<div style={{ color: "#fff", padding: "2rem" }}>Cargando…</div>}>
+            <Suspense fallback={<div className="loading-screen">Cargando...</div>}>
             <Routes>
                 <Route
                 path="/"
                 element={
                     <>
                     <Header
-                        setActiveSection={setActiveSection}
                         activeSection={activeSection}
-                        className={`header ${isHeaderEntering ? "header-entering" : ""}`}
+                        setActiveSection={setActiveSection}
+                        className={`header ${
+                        isHeaderEntering ? "header-entering" : ""
+                        }`}
                     />
 
                     {activeSection !== null && (
                         <PortfolioContent
                         activeSection={activeSection}
-                        setActiveSection={setActiveSection}
                         scrollToTop={scrollToTop}
                         formData={formData}
-                        setFormData={setFormData}
+                        setFormData={setFormData}    
                         status={status}
-                        setStatus={setStatus}
+                        setStatus={setStatus}        
                         handleChange={handleChange}
                         handleSubmit={handleSubmit}
                         />
@@ -159,6 +193,18 @@ function App() {
             </Routes>
             </Suspense>
         </div>
+
+        {/* Panel lateral de configuración */}
+        <AnimatePresence>
+            {isSettingsOpen && (
+            <SettingsPanel
+                onClose={() => setIsSettingsOpen(false)}
+                themeHook={themeHook}
+                fontHook={fontHook}
+                bgHook={bgHook}
+            />
+            )}
+        </AnimatePresence>
         </div>
     );
 }

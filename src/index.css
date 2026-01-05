@@ -1,51 +1,338 @@
+/* =========================
+   FONTS — LOCAL
+   ========================= */
+
 @font-face {
-  font-family: "Frank Ruhl Libre";
-  src: url("/fonts/FrankRuhlLibre-Regular.woff2") format("woff2");
+font-family: 'Geist Sans';
+src: url('/fonts/GeistSans-Regular.woff2') format('woff2');
+font-weight: 400;
+font-style: normal;
+font-display: swap;
+}
+
+
+@font-face {
+font-family: 'Geist Sans';
+src: url('/fonts/GeistSans-Bold.woff2') format('woff2');
+font-weight: 700;
+font-style: normal;
+font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Haas Grotesk';
+  src: url('/fonts/NHaasGroteskDSPro-55Rg.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Frank Ruhl Libre";
-  src: url("/fonts/FrankRuhlLibre-Bold.woff2") format("woff2");
+  font-family: 'Neue Haas Grotesk';
+  src: url('/fonts/NHaasGroteskDSPro-65Md.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Haas Grotesk';
+  src: url('/fonts/NHaasGroteskDSPro-75Bd.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
-@font-face {
-  font-family: "Gambarino";
-  src: url("/fonts/Gambarino-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+/* =======================================================
+   VARIABLES GLOBALES + DESIGN TOKENS
+   ======================================================= */
+
+/* BASE (fallback neutro) */
+:root {
+
+    --font-body: 'Neue Haas Grotesk', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-ui: 'Neue Haas Grotesk', system-ui, sans-serif;
+    --font-heading: 'Geist Sans', system-ui, sans-serif;
+
+  /* -------- PALETA UI -------- */
+  --color-primary:   #A6D9E2;
+  --color-secondary: #99C7EC;
+  --color-dark:      #00577C;
+  --color-accent:    #F9C5B1;
+
+  /* -------- TOKENS UI -------- */
+  --bg-main: #ffffff;
+  --surface-1: rgba(255, 255, 255, 0.55);
+  --surface-2: rgba(255, 255, 255, 0.35);
+
+  --text-primary: #111111;
+  --text-secondary: rgba(17, 17, 17, 0.75);
+
+  --heading: #111111;
+  --border-subtle: rgba(17, 17, 17, 0.18);
+
+  --action: var(--color-accent);
+  --action-hover: #f6b19a;
+  --action-contrast: var(--color-dark);
+
+  --link: var(--color-dark);
+  --link-hover: var(--color-primary);
+
+  --section-bg: var(--surface-1); /* Añadir esta */
+  --section-border: var(--border-subtle);
+  --section-shadow: none;
+
+  /* -------- TOKENS GRADIENT -------- */
+  --bg-grad-1: #ffffff;
+  --bg-grad-2: #e5f4f7;
+  --bg-grad-3: #dcecf5;
+  --bg-grad-4: #f3e1d8;
+
+  /* -------- COMPAT HOOKS -------- */
+  --bg-color: var(--bg-main);
+  --text-color: var(--text-primary);
+  --heading-color: var(--heading);
+  --accent-color: var(--color-dark);
+
+  --card-bg: var(--surface-1);
+  --card-border: var(--border-subtle);
+  --card-border-hover: var(--border-subtle);
+  --card-shadow-hover: none;
+
+  /* -------- OTROS -------- */
+  --font-size-base: 16px;
+  --font-size-scale: 1;
+  --bg-animation: 1;
 }
 
+/* =======================================================
+   LIGHT A
+   ======================================================= */
 
-/* Reset básico */
+:root:not(.dark),
+:root[data-theme="light-a"] {
+  --color-primary:   #D4D4DB;
+  --color-secondary: #99C7EC;
+  --color-dark:      #00577C;
+  --color-accent:    #F9C5B1;
+
+  --bg-main: #F7FBFD;
+  --surface-1: rgba(255, 255, 255, 0.62);
+  --surface-2: rgba(255, 255, 255, 0.42);
+
+  --text-primary: var(--color-dark);
+  --text-secondary: rgba(0, 87, 124, 0.78);
+
+  --heading: var(--color-dark);
+  --border-subtle: rgba(0, 87, 124, 0.18);
+
+  --action: var(--color-accent);
+  --action-hover: #f6b19a;
+  --action-contrast: var(--color-dark);
+
+  --link: var(--color-dark);
+  --link-hover: #003f58;
+
+  --bg-grad-1: #F7FBFD;
+  --bg-grad-2: #DCECF4;
+  --bg-grad-3: #C9E0EF;
+  --bg-grad-4: #F3D6C9;
+
+  --bg-color: var(--bg-main);
+  --text-color: var(--text-primary);
+  --heading-color: var(--heading);
+  --accent-color: var(--color-dark);
+}
+
+/* =======================================================
+   LIGHT B
+   ======================================================= */
+
+   :root[data-theme="light-b"] {
+    --color-primary:   #6487B7;
+    --color-secondary: #3A737D;
+    --color-dark:      #1F2F38;
+    --color-accent:    #F18A75;
+  
+    --bg-main: #F6FAFC;
+    --surface-1: rgba(255, 255, 255, 0.68);
+    --surface-2: rgba(255, 255, 255, 0.45);
+  
+    --text-primary: var(--color-dark);
+    --text-secondary: rgba(31, 47, 56, 0.78);
+  
+    --heading: var(--color-dark);
+    --border-subtle: rgba(31, 47, 56, 0.18);
+  
+    --action: var(--color-accent);
+    --action-hover: #f4a08e;
+    --action-contrast: #1F2F38;
+  
+    --link: var(--color-secondary);
+    --link-hover: var(--color-primary);
+  
+    /* Gradient palette (derivada) */
+    --bg-grad-1: #F6FAFC;
+    --bg-grad-2: #D6E2EF;
+    --bg-grad-3: #CBE3E1;
+    --bg-grad-4: #F8D1C4;
+  
+    --bg-color: var(--bg-main);
+    --text-color: var(--text-primary);
+    --heading-color: var(--heading);
+    --accent-color: var(--color-dark);
+  }
+
+/* =======================================================
+   DARK A (TOKENIZADO)
+   ======================================================= */
+
+:root.dark,
+:root[data-theme="dark-a"] {
+  --color-primary:   #1f3a5f;
+  --color-secondary: #2b4f6c;
+  --color-dark:      #e2e2e2;
+  --color-accent:    #6bd4e6;
+
+  --bg-main: #050816;
+  --surface-1: rgba(10, 15, 40, 0.55);
+  --surface-2: rgba(10, 15, 40, 0.35);
+
+  --text-primary: #e2e2e2;
+  --text-secondary: rgba(226, 226, 226, 0.75);
+
+  --heading: #ffffff;
+  --border-subtle: rgba(255, 255, 255, 0.22);
+
+  --action: var(--color-accent);
+  --action-hover: #8be9f0;
+  --action-contrast: #050816;
+
+  --link: #8be9f0;
+  --link-hover: #ffffff;
+
+  --bg-grad-1: #050816;
+  --bg-grad-2: #0b1b3a;
+  --bg-grad-3: #1f3a5f;
+  --bg-grad-4: #2b4f6c;
+
+  --bg-color: var(--bg-main);
+  --text-color: var(--text-primary);
+  --heading-color: var(--heading);
+  --accent-color: var(--color-accent);
+}
+
+/* =======================================================
+   DARK B
+   ======================================================= */
+
+  :root.dark[data-theme="dark-b"],
+  :root[data-theme="dark-b"] {
+    --color-primary:   #355469; /* estructura, cards */
+    --color-secondary: #00577C; /* profundidad / énfasis */
+    --color-dark:      #FCE4E7; /* texto principal */
+    --color-accent:    #BAA68B; /* acento cálido */
+
+  
+    --bg-main: #001722;               /* derivado oscuro del azul */
+    --surface-1: #3F5F75;             /* cards / panels */
+    --surface-2: #2E4A5D;             /* profundidad */
+    
+    --text-primary: #FCE4E7;           /* AAA sobre bg */
+    --text-secondary: rgba(252,228,231,0.82);
+    
+    --heading: #FFFFFF;
+    
+    --border-subtle: rgba(252, 228, 231, 0.25);
+    
+    --action: #BAA68B;
+    --action-hover: #C8B79C;
+    --action-contrast: #001F2E;
+
+
+    --link: #BAA68B;
+    --link-hover: #FCE4E7;
+  
+    --bg-grad-1: #001F2E;  /* base */
+    --bg-grad-2: #003E5A;  /* transición */
+    --bg-grad-3: #00577C;  /* profundidad */
+    --bg-grad-4: #355469;  /* lift suave */
+
+    --bg-color: var(--bg-main);
+    --text-color: var(--text-primary);
+    --heading-color: var(--heading);
+    --accent-color: var(--color-accent);
+
+    --section-bg: #3F5F75;                
+    --section-border: rgba(186,166,139,0.35);
+
+    --card-bg: var(--surface-1);
+    --card-border: rgba(186,166,139,0.25);
+    --card-border-hover: rgba(186,166,139,0.55);
+    --card-shadow-hover: 0 12px 28px rgba(0,0,0,0.45);
+  }
+
+/* =======================================================
+   GLOBAL
+   ======================================================= */
+
+html {
+  font-size: calc(var(--font-size-base) * var(--font-size-scale));
+}
+
 body {
   margin: 0;
   padding: 0;
-  background: #000000;
+  background-color: transparent;
+  color: var(--text-color);
   overflow-x: hidden;
-  color: #fff;
+  transition: background 0.3s ease, color 0.3s ease;
+  font-family: var(--font-body);
+  font-weight: 400;
 }
 
-/* Contenido general */
+/* =======================================================
+   GRADIENT BACKGROUND
+   ======================================================= */
+
+.gradient-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    135deg,
+    var(--bg-grad-1) 0%,
+    var(--bg-grad-2) 25%,
+    var(--bg-grad-3) 50%,
+    var(--bg-grad-4) 75%,
+    var(--bg-grad-1) 100%
+  );
+  background-size: 200% 200%;
+  animation: gradientShift 18s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+:root[style*="--bg-animation: 0"] .gradient-background {
+  animation: none !important;
+}
+
 .app {
   position: relative;
-  z-index: 2;
-  color: #fff;
+  z-index: 1;
+  color: var(--text-color);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* Contenedor del contenido */
 .content-wrapper {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -69,17 +356,18 @@ body {
 }
 
 .header-title {
-  font-family: "Frank Ruhl Libre", serif;
+  font-family: var(--font-heading);
   font-size: clamp(2.2rem, 4vw, 3.2rem);
   font-weight: 700;
-  color: #ffffff;
+  letter-spacing: -0.01em;
+  color: var(--heading-color);
   margin-bottom: 1rem;
 }
 
 .header-text {
-  font-family: 'Gambarino', sans-serif;
+  font-family: var(--font-body);
   font-size: clamp(1.1rem, 2vw, 1.4rem);
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   margin-top: 0.5rem;
   margin-bottom: 2rem;
 }
@@ -94,33 +382,39 @@ body {
 .nav-button {
   padding: clamp(0.4rem, 0.8vw, 0.55rem) clamp(0.8rem, 1.6vw, 1.2rem);
   border-radius: 9999px;
-  background-color: #ffffff;
-  color: #000000;
-  font-family: "Frank Ruhl Libre", serif;
+
+  /* Antes: blanco fijo */
+  background-color: var(--surface-1);
+  color: var(--text-primary);
+
+  font-family: var(--font-ui);
   font-size: clamp(0.8rem, 1.2vw, 0.9rem);
-  font-weight: 700;
-  border: none;
+  font-weight: 500;
+
+  border: 1px solid var(--border-subtle);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .nav-button:hover {
-  background-color: #D3D3D3;
-  color: #000000;
+  /* Antes: gris fijo */
+  background-color: var(--color-primary);
+  color: var(--text-primary);
 }
-
 
 /* Estilos para el botón de navegación activo */
 .nav-button.active {
-  background-color: #008b8e;
-  color: #ffffff;
-  border: 2px solid #ffffff;
+  /* Antes: #008b8e fijo */
+  background-color: var(--action);
+  color: var(--action-contrast);
+  border: 2px solid rgba(255, 255, 255, 0.65);
   font-weight: 700;
 }
 
 /* Estilos de las secciones */
 .main-content {
-  background: rgba(0, 0, 0, 0.2);
+  /* Antes: rgba(0,0,0,0.2) fijo */
+  background: var(--surface-2);
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -131,7 +425,8 @@ body {
 }
 
 .section-container {
-  background: rgba(0, 0, 0, 0.4);
+  /* Antes: rgba(0,0,0,0.4) fijo */
+  background: var(--section-bg, var(--surface-1));
   border-radius: 1rem;
   padding: 2rem;
   margin-bottom: 2rem;
@@ -146,9 +441,10 @@ body {
   box-sizing: border-box;
   width: 100%;
   transition: opacity 0.5s ease-in-out;
+  border: 1px solid var(--section-border, var(--border-subtle));
 }
 
-/* Clase para ocultar secciones */
+/* Clase para ocultar secciones (MANTENIDA como la tenías) */
 .section-hidden {
   opacity: 0;
   height: 0;
@@ -161,18 +457,18 @@ body {
 }
 
 .section-title {
-  font-family: "Frank Ruhl Libre", serif;
+  font-family: var(--font-ui);
   font-size: clamp(1.6rem, 2.5vw, 2.2rem);
   font-weight: 700;
-  color: #ffffff;
+  color: var(--heading-color);
   margin-bottom: 1.5rem;
   text-align: center;
 }
 
 .section-text {
-  font-family: 'Gambarino', sans-serif;
+  font-family: var(--font-body);
   font-size: clamp(0.95rem, 1.4vw, 1.05rem);
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   text-align: center;
 }
 
@@ -196,7 +492,7 @@ body {
   height: 16rem;
   border-radius: 0.5rem;
   object-fit: cover;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid var(--border-subtle);
   margin: 0 auto;
 }
 
@@ -229,13 +525,13 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .email-link:hover {
-  color: #008b8e;
+  color: var(--link-hover);
 }
 
 .email-icon {
@@ -252,23 +548,26 @@ body {
 }
 
 .project-card {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--card-bg, var(--surface-2));
   border-radius: 0.75rem;
+  border: 1px solid var(--card-border, var(--border-subtle));
   padding: 1.5rem;
   text-align: center;
-  transition: transform 0.3s ease, background 0.3s ease;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .project-card:hover {
   transform: translateY(-5px);
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--card-bg, var(--surface-1));
+  border-color: var(--card-border-hover, var(--border-subtle));
+  box-shadow: var(--card-shadow-hover, none);
 }
 
 .project-title {
-  font-family: "Frank Ruhl Libre", serif;
+  font-family: var(--font-ui);
   font-size: clamp(1.05rem, 1.8vw, 1.25rem);
   font-weight: 700;
-  color: #ffffff;
+  color: var(--heading-color);
   margin-bottom: 0.5rem;
 }
 
@@ -287,21 +586,26 @@ body {
   justify-content: center;
   padding: 0.45rem 0.9rem;
   border-radius: 9999px;
-  background-color: #ffffff;
-  color: #000000;
-  font-family: "Frank Ruhl Libre", serif;
+
+  /* Antes: blanco fijo */
+  background-color: var(--surface-1);
+  color: var(--text-primary);
+
+  font-family: var(--font-ui);
   font-size: clamp(0.8rem, 1.2vw, 0.9rem);
-  font-weight: 400;
+  font-weight: 500;
   text-decoration: none;
   transition: all 0.3s ease;
+  border: 1px solid var(--border-subtle);
 }
 
 .project-link:hover {
-  background-color: #008b8e;
-  color: #000000;
+  /* Antes: #008b8e fijo */
+  background-color: var(--action);
+  color: var(--action-contrast);
 }
 
-/* --- Estilo circular + tooltip GitHub --- */
+/* --- Estilo circular + tooltip GitHub (MANTENIDO) --- */
 .project-link.github {
   position: relative;
   display: inline-flex;
@@ -339,12 +643,16 @@ body {
   transform: translate(-50%, -4px);
 }
 
+/* Scroll to top (MANTENIDO) */
 .scroll-top-button {
   position: fixed;
   bottom: clamp(15px, 2vw, 20px);
   right: clamp(15px, 2vw, 20px);
-  background-color: #008b8e;
-  color: #ffffff;
+
+  /* Antes: #008b8e fijo */
+  background-color: var(--action);
+
+  color: var(--action-contrast);
   border: none;
   border-radius: 50%;
   width: clamp(32px, 4vw, 40px);
@@ -367,7 +675,6 @@ body {
   visibility: visible;
   transform: translateY(0);
 }
-
 
 /* Animación para títulos */
 @keyframes fadeInSlideUp {
@@ -417,29 +724,6 @@ body {
   right: 10px;
 }
 
-.language-switcher button {
-  padding: clamp(0.4rem, 0.8vw, 0.55rem) clamp(0.6rem, 1.2vw, 0.75rem);
-  margin-left: 5px;
-  border: none;
-  background-color: #ffffff;
-  color: #000000;
-  cursor: pointer;
-  border-radius: 4px;
-  font-family: "Frank Ruhl Libre", serif;
-  font-size: clamp(0.75rem, 1vw, 0.9rem);
-  transition: background-color 0.3s, transform 0.2s ease;
-}
-
-.language-switcher button:hover {
-  background-color: #008b8e;
-  transform: scale(1.05);
-}
-
-.language-switcher button.active {
-  background-color: #008b8e;
-  color: #ffffff;
-}
-
 /* Contacto y formularios */
 .contact-form {
   display: flex;
@@ -457,51 +741,73 @@ body {
 }
 
 .form-group label {
-  font-family: "Frank Ruhl Libre", serif;
+  font-family: var(--font-ui);
   font-size: 1rem;
-  color: #ffffff;
+  color: var(--heading-color);
 }
-
 
 .form-group input,
 .form-group textarea {
   padding: 0.75rem;
   border-radius: 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  font-family: 'Gambarino', sans-serif;
+  border: 1px solid var(--border-subtle);
+
+  /* Antes: rgba(255,255,255,0.1) y texto blanco fijo */
+  background: rgba(255, 255, 255, 0.65);
+  color: var(--text-primary);
+
+  font-family: var(--font-body);
   font-size: 1rem;
   outline: none;
   transition: border-color 0.3s;
 }
 
-.form-group input:focus,
-.form-group textarea:focus { border-color: #2bffff; }
+/* En dark, mantenemos inputs oscuros para legibilidad */
+:root.dark .form-group input,
+:root.dark .form-group textarea {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
 
-.form-group textarea { resize: vertical; min-height: 100px; }
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--action-hover);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
 
 .form-submit {
   padding: clamp(0.4rem, 0.8vw, 0.55rem) clamp(0.8rem, 1.6vw, 1.2rem);
   border-radius: 9999px;
-  background-color: #ffffff;
-  color: #000000;
-  font-family: "Frank Ruhl Libre", serif;
+
+  /* Antes: blanco fijo */
+  background-color: var(--action);
+  color: var(--action-contrast);
+
+  font-family: var(--font-ui);
   font-size: clamp(0.8rem, 1.2vw, 0.9rem);
-  font-weight: 400;
+  font-weight: 500;
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
   align-self: center;
 }
 
-.form-submit:hover { background-color: #2bffff; }
+.form-submit:hover {
+  background-color: var(--action-hover);
+}
 
 .form-status {
-  font-family: 'Gambarino', sans-serif;
+  font-family: var(--font-body);
   font-size: 1rem;
-  color: #2bffff;
+  color: var(--action-hover);
   text-align: center;
 }
 
-.contact-content .section-text.mb-4 { margin-bottom: 0.3rem; }
+.contact-content .section-text.mb-4 {
+  margin-bottom: 0.3rem;
+}
