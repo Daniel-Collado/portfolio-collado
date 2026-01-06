@@ -145,7 +145,10 @@ function App() {
         <GradientBackground />
 
         {/* Botón de configuración fijo arriba a la derecha (Opción A) */}
-        <SettingsButton onClick={() => setIsSettingsOpen(true)} />
+        {!isSettingsOpen && (
+            <SettingsButton onClick={() => setIsSettingsOpen(true)} />
+        )}
+
 
         <div className="content-wrapper">
             <Suspense fallback={<div className="loading-screen">Cargando...</div>}>

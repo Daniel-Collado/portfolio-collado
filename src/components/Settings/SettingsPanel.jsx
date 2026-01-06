@@ -29,6 +29,7 @@ export default function SettingsPanel({
                 transition={{ type: "spring", stiffness: 140, damping: 18 }}
             >
                 <h2 className="settings-title">Configuración</h2>
+                <button className="settings-close" onClick={onClose} aria-label="Cerrar configuración">x</button>
 
                 {/* Idioma */}
                 <div className="settings-section">

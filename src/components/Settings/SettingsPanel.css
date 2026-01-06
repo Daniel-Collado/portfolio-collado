@@ -147,3 +147,23 @@
   transform: translateY(-1px) scale(1.03);
   box-shadow: 0 6px 16px rgba(15, 23, 42, 0.5);
 }
+
+/* ===== BOTÓN DE CIERRE DEL PANEL ===== */
+.settings-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-size: 1.8rem;
+  color: var(--text-color);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1100;
+  line-height: 1;
+  padding: 4px;
+  transition: opacity 0.2s ease;
+}
+
+.settings-close:hover {
+  opacity: 0.7;
+}
