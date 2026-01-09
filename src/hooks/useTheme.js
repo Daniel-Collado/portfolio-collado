@@ -12,28 +12,34 @@ export function useTheme() {
     useEffect(() => {
         const root = document.documentElement;
 
+        let activePreset;
+
         if (theme === "dark") {
             root.classList.add("dark");
-
-            // Si el preset guardado no es dark, forzamos dark-a
-            const darkPreset = preset.startsWith("dark")
-                ? preset
-                : "dark-a";
-
-            root.dataset.theme = darkPreset;
+            activePreset = preset.startsWith("dark") ? preset : "dark-a";
         } else {
             root.classList.remove("dark");
-
-            // Si el preset guardado no es light, forzamos light-a
-            const lightPreset = preset.startsWith("light")
-                ? preset
-                : "light-a";
-
-            root.dataset.theme = lightPreset;
+            activePreset = preset.startsWith("light") ? preset : "light-a";
         }
 
+        root.dataset.theme = activePreset;
+
+        // Guardar en localStorage
         localStorage.setItem("theme", theme);
         localStorage.setItem("theme-preset", preset);
+
+        // Actualizar theme-color para móviles
+        const themeColorMeta = document.getElementById('theme-color-meta');
+        const colorMap = {
+            "light-a": "#C5D6E8",
+            "light-b": "#6487B7",
+            "dark-a": "#0A1C2B",
+            "dark-b": "#001722",
+        };
+
+        if (themeColorMeta && colorMap[activePreset]) {
+            themeColorMeta.setAttribute("content", colorMap[activePreset]);
+        }
     }, [theme, preset]);
 
     const toggleTheme = () => {
