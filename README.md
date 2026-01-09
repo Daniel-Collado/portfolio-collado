@@ -1,12 +1,49 @@
-# React + Vite
+#  Daniel Collado — Portfolio Personal
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este es el repositorio de mi portfolio personal, desarrollado con foco en arquitectura moderna, diseño tokenizado, accesibilidad y temas personalizables. Construido con **React + Vite**, incorpora múltiples temas visuales, animaciones fluidas, y un panel de configuración interactivo.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Tecnologías principales
 
-## Expanding the ESLint configuration
+- ⚛️ React + Vite
+- 🌐 React Router DOM
+- 🔥 Firebase (Auth + Firestore)
+- ☁️ Cloudinary (para uploads)
+- 📧 EmailJS (contacto)
+- 🌍 react-i18next (internacionalización ES / EN)
+- 🎨 Framer Motion + CSS para animaciones
+- 📄 Modular CSS (tokenizado)
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🎨 Sistema visual
+
+- **Totalmente tokenizado** con CSS Variables (por rol: fondo, sección, card, texto, etc.)
+- **Diseño semántico desacoplado:** `section ≠ card ≠ fondo`
+- **Compatibilidad con gradientes dinámicos**
+- **Accesibilidad tipográfica** y diseño responsive completo
+
+---
+
+## 🌗 Temas disponibles
+
+> El usuario puede alternar entre **4 modos visuales** desde el panel lateral de configuración:
+
+| Tipo     | Modo       | Descripción |
+|----------|------------|-------------|
+| ☀️ Light | `light-a`  | Paleta clara con acentos suaves |
+| ☀️ Light | `light-b`  | Paleta clara alternativa con más contraste |
+| 🌙 Dark  | `dark-a`   | Estilo oscuro tradicional, alto contraste |
+| 🌙 Dark  | `dark-b`   | Paleta refinada, en fase de pulido fino |
+
+Los temas se aplican dinámicamente mediante:
+
+```js
+document.documentElement.dataset.theme = "dark-b"
+
+
+
+📄 Licencia
+
+Este proyecto es personal. Si querés reutilizar partes de la arquitectura, diseño o lógica, consultame antes :)

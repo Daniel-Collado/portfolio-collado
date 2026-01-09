@@ -579,6 +579,14 @@ body {
   margin-bottom: 1rem;
 }
 
+.project-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
 /* --- Botones de proyectos adaptables --- */
 .project-link {
   display: inline-flex;

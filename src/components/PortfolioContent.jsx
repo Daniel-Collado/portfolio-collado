@@ -117,46 +117,48 @@ const PortfolioContent = ({
 
             {!loading && !error && (
                 <div className="projects-grid">
-                {projects.map((project) => (
-                    <div className="project-card" key={project.id}>
-                    <img
-                        src={project.image_url}
-                        alt={project[`title_${currentLang}`] || ""}
-                        className="project-image"
-                        loading="lazy"
-                    />
+                    {projects.map((project) => (
+                        <div className="project-card" key={project.id}>
+                            <img
+                                src={project.image_url}
+                                alt={project[`title_${currentLang}`] || ""}
+                                className="project-image"
+                                loading="lazy"
+                            />
 
-                    <h3 className="project-title">
-                        {project[`title_${currentLang}`] || "Sin título"}
-                    </h3>
+                            <h3 className="project-title">
+                                {project[`title_${currentLang}`] || "Sin título"}
+                            </h3>
 
-                    <p className="section-text mb-4">
-                        {project[`description_${currentLang}`] || ""}
-                    </p>
+                            <p className="section-text mb-4">
+                                {project[`description_${currentLang}`] || ""}
+                            </p>
 
-                    <a
-                        href={project.project_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="project-link"
-                    >
-                        {t("view_project")}
-                    </a>
+                            <div className="project-links">
+                                <a
+                                    href={project.project_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="project-link"
+                                >
+                                    {t("view_project")}
+                                </a>
 
-                    {project.github_url && (
-                        <a
-                        href={project.github_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="project-link github"
-                        aria-label={t("view_code")}
-                        data-tooltip={t("view_code")}
-                        >
-                        <FaGithub aria-hidden="true" />
-                        </a>
-                    )}
-                    </div>
-                ))}
+                                {project.github_url && (
+                                    <a
+                                    href={project.github_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="project-link github"
+                                    aria-label={t("view_code")}
+                                    data-tooltip={t("view_code")}
+                                    >
+                                    <FaGithub aria-hidden="true" />
+                                    </a>
+                                )}
+                            </div>
+                        </div>
+                    ))}
                 </div>
             )}
             </section>
