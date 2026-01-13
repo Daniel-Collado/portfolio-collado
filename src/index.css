@@ -278,6 +278,9 @@ font-display: swap;
 
 html {
   font-size: calc(var(--font-size-base) * var(--font-size-scale));
+  /*scroll-behavior: smooth;*/
+  overflow-y: scroll; 
+  /*scrollbar-gutter: stable;*/
 }
 
 body {
@@ -343,6 +346,7 @@ body {
 
 /* Estilos del Header */
 .header {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;

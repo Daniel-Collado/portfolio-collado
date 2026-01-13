@@ -86,24 +86,27 @@ function App() {
 
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-    // Scroll suave personalizado
     const scrollToTop = () => {
         setIsHeaderEntering(true);
 
-        const totalDuration = 800;
-        const intervalDelay = 15;
-        const scrollStep = -window.scrollY / (totalDuration / intervalDelay);
+        const duration = 600; // duración total en ms (ajustable)
+        const interval = 15;  // frecuencia del scroll (ms)
+        const totalSteps = duration / interval;
+        const scrollStep = -window.scrollY / totalSteps;
 
         const scrollInterval = setInterval(() => {
-        if (window.scrollY !== 0) {
+            if (window.scrollY > 0) {
             window.scrollBy(0, scrollStep);
-        } else {
+            } else {
             clearInterval(scrollInterval);
+            window.scrollTo(0, 0); // aseguro llegar exacto
             setActiveSection(null);
             setIsHeaderEntering(false);
-        }
-        }, intervalDelay);
+            }
+        }, interval);
     };
+
+
 
     // Manejo del formulario
     const handleChange = (e) => {
