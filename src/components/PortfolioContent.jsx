@@ -35,7 +35,7 @@ const PortfolioContent = ({
 
             let q;
             try {
-            q = query(collection(db, "projects"), orderBy("created_at", "desc"));
+            q = query(collection(db, "projects"), orderBy("order","asc"));
             } catch {
             q = query(collection(db, "projects"));
             }

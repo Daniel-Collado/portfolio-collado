@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 
 export function useTheme() {
     const [theme, setTheme] = useState(() => {
-        return localStorage.getItem("theme") || "light";
+        return localStorage.getItem("theme") || "dark";
     });
 
     const [preset, setPreset] = useState(() => {
-        return localStorage.getItem("theme-preset") || "light-a";
+        return localStorage.getItem("theme-preset") || "dark-a";
     });
 
     useEffect(() => {

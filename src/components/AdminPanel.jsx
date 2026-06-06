@@ -23,21 +23,92 @@ const AdminPanel = () => {
     // Firestore helpers (lazy import)
     const loadProjects = async () => {
         const db = await getDb();
-        const { collection, getDocs } = await import("firebase/firestore");
-        const querySnapshot = await getDocs(collection(db, "projects"));
-        return querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+
+        const {
+            collection,
+            getDocs,
+        } = await import("firebase/firestore");
+
+        const snapshot = await getDocs(
+            collection(db, "projects")
+        );
+
+        return snapshot.docs
+            .map((d, index) => ({
+                id: d.id,
+                ...d.data(),
+
+                order:
+                    d.data().order ??
+                    d.data().created_at?.seconds ??
+                    index,
+            }))
+            .sort((a, b) => a.order - b.order);
     };
 
     useEffect(() => {
         (async () => {
         try {
-            const list = await loadProjects();
-            setProjects(list);
-        } catch (error) {
-            console.error("Error al obtener proyectos: ", error);
+        const list = await loadProjects();
+
+        setProjects(list);
+
+        const withoutOrder =
+        list.filter(
+        (p) =>
+        p.order === undefined
+        );
+
+        if (
+        withoutOrder.length
+        ) {
+
+        const db =
+        await getDb();
+
+        const {
+        doc,
+        updateDoc,
+        } =
+        await import(
+        "firebase/firestore"
+        );
+
+        await Promise.all(
+        list.map(
+        (
+        project,
+        index
+        ) =>
+        updateDoc(
+        doc(
+        db,
+        "projects",
+        project.id
+        ),
+        {
+        order:
+        index,
         }
+        )
+        )
+        );
+
+        }
+
+        } catch (
+        error
+        ) {
+
+        console.error(
+        "Error al obtener proyectos:",
+        error
+        );
+
+        }
+
         })();
-    }, []);
+        }, []);
 
     const handleChange = (e) => {
         setProjectData({ ...projectData, [e.target.name]: e.target.value });
@@ -90,6 +161,74 @@ const AdminPanel = () => {
         } catch (error) {
         console.error("Error al eliminar el documento: ", error);
         setStatus("Error al eliminar el proyecto.");
+        }
+    };
+
+    const handleMove = async (index, direction) => {
+
+        const target =
+            direction === "up"
+                ? index - 1
+                : index + 1;
+
+        if (
+            target < 0 ||
+            target >= projects.length
+        ) {
+            return;
+        }
+
+        const updated = [...projects];
+
+        [
+            updated[index],
+            updated[target],
+        ] = [
+            updated[target],
+            updated[index],
+        ];
+
+        updated.forEach((p, i) => {
+            p.order = i;
+        });
+
+        setProjects(updated);
+
+        try {
+
+            const db = await getDb();
+
+            const {
+                doc,
+                updateDoc,
+            } = await import(
+                "firebase/firestore"
+            );
+
+            await Promise.all(
+                updated.map((project) =>
+                    updateDoc(
+                        doc(
+                            db,
+                            "projects",
+                            project.id
+                        ),
+                        {
+                            order:
+                                project.order,
+                        }
+                    )
+                )
+            );
+
+        } catch (err) {
+
+            console.error(err);
+
+            const list =
+                await loadProjects();
+
+            setProjects(list);
         }
     };
 
@@ -147,6 +286,7 @@ const AdminPanel = () => {
             ...projectData,
             image_url: imageUrl,
             created_at: new Date(),
+            order: projects.length,
             });
             setStatus("¡Proyecto agregado con éxito!");
         }
@@ -249,7 +389,7 @@ const AdminPanel = () => {
             </div>
 
             <div className="form-group">
-            <label htmlFor="file-upload" className="custom-file-upload admin-button">
+            <label htmlFor="file-upload" className="custom-file-upload">
                 {imageFile
                 ? imageFile.name
                 : editingProject
@@ -285,17 +425,60 @@ const AdminPanel = () => {
         <div className="projects-list">
             <h3>Proyectos Existentes</h3>
             <ul className="admin-project-list">
-            {projects.map((project) => (
+            {projects.map((project,index) => (
                 <li key={project.id} className="admin-project-item">
                 <span>{project.title_es}</span>
                 <div className="admin-project-actions">
-                    <button onClick={() => handleEdit(project)} className="admin-button edit-button">
+
+                    <button
+                    type="button"
+                    className="admin-button"
+                    disabled={index===0}
+                    onClick={() =>
+                    handleMove(index,"up")
+                    }
+                    >
+                    ↑
+                    </button>
+
+                    <button
+                    type="button"
+                    className="admin-button"
+                    disabled={
+                    index===projects.length-1
+                    }
+                    onClick={() =>
+                    handleMove(index,"down")
+                    }
+                    >
+                    ↓
+                    </button>
+
+                    <button
+                        onClick={() =>
+                        handleEdit(project)
+                        }
+                        className="
+                        admin-button
+                        edit-button
+                        "
+                    >
                     Editar
                     </button>
-                    <button onClick={() => handleDelete(project.id)} className="admin-button delete-button">
+
+                    <button
+                        onClick={() =>
+                        handleDelete(project.id)
+                        }
+                        className="
+                        admin-button
+                        delete-button
+                        "
+                    >
                     Eliminar
                     </button>
-                </div>
+
+                    </div>
                 </li>
             ))}
             </ul>
