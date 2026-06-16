@@ -18,6 +18,7 @@ import { useFontSize } from "./hooks/useFontSize";
 import { useBackgroundAnimation } from "./hooks/useBackgroundAnimation";
 
 import "./index.css";
+import AnalyticsTracker from "./components/analytics/AnalyticsTracker";
 
 // Lazy-load admin modules
 const AdminLogin = React.lazy(() => import("./components/AdminLogin.jsx"));
@@ -144,6 +145,7 @@ function App() {
 
     return (
         <div className="app">
+        <AnalyticsTracker />
         {/* Fondo global */}
         <GradientBackground />
 

@@ -2,13 +2,19 @@
 
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { trackSectionView, } from "../lib/analytics/analytics";
 
 const Header = ({ activeSection, setActiveSection, className }) => {
     const { t } = useTranslation();
 
-    const handleNavLinkClick = (sectionId) => {
+    const handleNavLinkClick = (
+    sectionId) => {
+        if (activeSection === sectionId) {
+            return;
+        }
         setActiveSection(sectionId);
-    };
+        trackSectionView(sectionId);
+        };
 
     return (
         <header className={className}>
