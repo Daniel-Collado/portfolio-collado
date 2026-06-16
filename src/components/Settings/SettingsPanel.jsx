@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import "./SettingsPanel.css";
+import { trackThemeChange, trackLanguageChange } from "../../lib/analytics/analytics";
+
 
 export default function SettingsPanel({
     onClose,
@@ -38,7 +40,13 @@ export default function SettingsPanel({
                         <span>Idioma actual:</span>
                         <select
                             value={i18n.language}
-                            onChange={(e) => i18n.changeLanguage(e.target.value)}
+                            onChange={(e) => {
+                                const nextLanguage = e.target.value;
+
+                                trackLanguageChange(nextLanguage);
+
+                                i18n.changeLanguage(nextLanguage);
+                            }}
                         >
                             <option value="es">ES</option>
                             <option value="en">EN</option>
@@ -51,7 +59,16 @@ export default function SettingsPanel({
                     <h4>Tema</h4>
                     <div className="settings-option">
                         <span>{themeHook.theme === "dark" ? "Oscuro" : "Claro"}</span>
-                        <button onClick={themeHook.toggleTheme}>
+                        <button
+                            onClick={() => {const nextTheme =
+                                    themeHook.theme === "dark"
+                                        ? "light"
+                                        : "dark";
+
+                                trackThemeChange(nextTheme);
+                                themeHook.toggleTheme();
+                            }}
+                        >
                             Cambiar
                         </button>
                     </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { FaGithub, FaEnvelope, FaArrowUp } from "react-icons/fa";
+import { trackProjectOpen, trackGithubOpen, } from "../lib/analytics/analytics";
 
 const PortfolioContent = ({
     activeSection,
@@ -139,6 +140,7 @@ const PortfolioContent = ({
                                     href={project.project_url}
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    onClick={() => trackProjectOpen(project.title_es)}
                                     className="project-link"
                                 >
                                     {t("view_project")}
@@ -149,6 +151,7 @@ const PortfolioContent = ({
                                     href={project.github_url}
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    onClick={() => trackGithubOpen(project.title_es)}
                                     className="project-link github"
                                     aria-label={t("view_code")}
                                     data-tooltip={t("view_code")}

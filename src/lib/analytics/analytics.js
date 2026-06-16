@@ -1,4 +1,5 @@
 let analyticsInstance = null;
+let logEventFn = null;
 
 export async function getAnalyticsInstance() {
     if (analyticsInstance) {
@@ -13,12 +14,20 @@ export async function getAnalyticsInstance() {
     }
 
     const [
-        { getAnalytics, isSupported },
+        analyticsModule,
         { initializeApp, getApps, getApp },
     ] = await Promise.all([
         import("firebase/analytics"),
         import("firebase/app"),
     ]);
+
+    const {
+        getAnalytics,
+        isSupported,
+        logEvent,
+    } = analyticsModule;
+
+    logEventFn = logEvent;
 
     const supported =
         await isSupported();
@@ -84,12 +93,7 @@ export async function trackPageView(path) {
         return;
     }
 
-    const { logEvent } =
-        await import(
-            "firebase/analytics"
-        );
-
-    logEvent(
+    logEventFn(
         analytics,
         "page_view",
         {
@@ -109,12 +113,7 @@ export async function trackEvent(
         return;
     }
 
-    const { logEvent } =
-        await import(
-            "firebase/analytics"
-        );
-
-    logEvent(
+    logEventFn(
         analytics,
         eventName,
         params
@@ -143,4 +142,53 @@ export async function trackSectionView(
                 section,
         }
     );
+}
+
+export async function trackProjectOpen(
+    project
+) {
+    await trackEvent(
+        "project_open",
+        {
+            project_name:
+                project,
+        }
+    );
+}
+
+export async function trackGithubOpen(
+    project
+) {
+    await trackEvent(
+        "project_github_open",
+        {
+            project_name:
+                project,
+        }
+    );
+}
+
+export async function trackContactSubmit() {
+    await trackEvent(
+        "contact_submit"
+    );
+}
+
+export async function trackContactSubmitError(
+    reason
+) {
+    await trackEvent(
+        "contact_submit_error",
+        {
+            reason,
+        }
+    );
+}
+
+export async function trackThemeChange(theme) {
+    await trackEvent("theme_changed", { theme });
+}
+
+export async function trackLanguageChange(language) {
+    await trackEvent("language_changed", { language });
 }

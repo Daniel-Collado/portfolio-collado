@@ -19,6 +19,7 @@ import { useBackgroundAnimation } from "./hooks/useBackgroundAnimation";
 
 import "./index.css";
 import AnalyticsTracker from "./components/analytics/AnalyticsTracker";
+import { trackContactSubmit, trackContactSubmitError } from "./lib/analytics/analytics";
 
 // Lazy-load admin modules
 const AdminLogin = React.lazy(() => import("./components/AdminLogin.jsx"));
@@ -138,8 +139,15 @@ function App() {
             import.meta.env.VITE_EMAILJS_PUBLIC_KEY
         )
         .then(
-            () => setStatus(t("form_success")),
-            () => setStatus(t("form_error"))
+            () => {
+                trackContactSubmit();
+                setStatus(t("form_success"));
+            },
+
+            () => {
+                trackContactSubmitError("emailjs");
+                setStatus(t("form_error"));
+            }
         );
     };
 
