@@ -17,6 +17,61 @@ Este es el repositorio de mi portfolio personal, desarrollado con foco en arquit
 
 ---
 
+## 📊 Analítica y SEO
+
+Implementación actual:
+
+* 🔥 Google Analytics 4 mediante Firebase Analytics
+* 📈 Medición SPA (React Router)
+* 🚫 Exclusión explícita de `/admin` y `/adminlogin`
+* 🧭 Tracking de navegación interna por secciones
+* 🌍 Eventos de idioma
+* 🎨 Eventos de tema
+* 📧 Eventos de contacto
+* 🔗 Eventos de apertura de proyectos
+* 🔎 Integración con Google Search Console
+* 🗺 Sitemap enviado y validado
+* 🤖 Robots configurado para evitar indexación del panel
+
+Eventos implementados:
+
+```txt
+page_view
+
+section_view
+
+project_open
+
+project_github_open
+
+contact_submit
+
+contact_submit_error
+
+theme_changed
+
+language_changed
+```
+
+Arquitectura:
+
+```txt
+App
+↓
+
+AnalyticsTracker
+
+↓
+
+analytics.js
+
+↓
+
+Firebase Analytics
+```
+
+---
+
 ## 🎨 Sistema visual
 
 - **Totalmente tokenizado** con CSS Variables (por rol: fondo, sección, card, texto, etc.)

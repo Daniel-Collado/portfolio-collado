@@ -2,6 +2,7 @@
 User-agent: *
 
 # No indexar el panel de administración
+Disallow: /admin
 Disallow: /adminlogin
 
 # Permite que se indexe todo el contenido
