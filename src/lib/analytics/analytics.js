@@ -122,6 +122,9 @@ export async function trackEvent(
 
 let lastSection = "";
 
+const visibleProjects =
+    new Set();
+
 export async function trackSectionView(
     section
 ) {
@@ -161,6 +164,31 @@ export async function trackGithubOpen(
 ) {
     await trackEvent(
         "project_github_open",
+        {
+            project_name:
+                project,
+        }
+    );
+}
+
+export async function trackProjectVisible(
+    project
+) {
+    if (
+        !project ||
+        visibleProjects.has(
+            project
+        )
+    ) {
+        return;
+    }
+
+    visibleProjects.add(
+        project
+    );
+
+    await trackEvent(
+        "project_visible",
         {
             project_name:
                 project,

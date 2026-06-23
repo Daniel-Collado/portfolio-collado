@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { FaGithub, FaEnvelope, FaArrowUp } from "react-icons/fa";
-import { trackProjectOpen, trackGithubOpen, } from "../lib/analytics/analytics";
+import { trackProjectOpen, trackGithubOpen, trackProjectVisible } from "../lib/analytics/analytics";
 
 const PortfolioContent = ({
     activeSection,
@@ -19,6 +19,11 @@ const PortfolioContent = ({
     const [error, setError] = useState(null);
 
     const [titleKey, setTitleKey] = useState(0);
+
+    const projectRefs =
+    React.useRef(
+        new Map()
+    );
 
     // ✅ SOLO carga proyectos si el usuario abre esa sección
     useEffect(() => {
@@ -75,6 +80,67 @@ const PortfolioContent = ({
         }
     }, [activeSection]);
 
+    useEffect(() => {
+    if (
+        activeSection !==
+            "proyectos" ||
+        !projects.length
+    ) {
+        return;
+    }
+
+        const observer =
+            new IntersectionObserver(
+                (
+                    entries
+                ) => {
+                    entries.forEach(
+                        (
+                            entry
+                        ) => {
+                            if (
+                                !entry.isIntersecting
+                            ) {
+                                return;
+                            }
+
+                            const project =
+                                entry.target.dataset.project;
+
+                            trackProjectVisible(
+                                project
+                            );
+
+                            observer.unobserve(
+                                entry.target
+                            );
+                        }
+                    );
+                },
+                {
+                    threshold:
+                        0.5,
+                }
+            );
+
+        projectRefs.current.forEach(
+            (el) => {
+                if (el) {
+                    observer.observe(
+                        el
+                    );
+                }
+            }
+        );
+
+        return () =>
+            observer.disconnect();
+
+    }, [
+        activeSection,
+        projects,
+    ]);
+
     const currentLang = i18n.language.split("-")[0];
 
     return (
@@ -119,7 +185,21 @@ const PortfolioContent = ({
             {!loading && !error && (
                 <div className="projects-grid">
                     {projects.map((project) => (
-                        <div className="project-card" key={project.id}>
+                        <div
+                            className="project-card"
+                            key={project.id}
+                            data-project={
+                                project.title_es
+                            }
+                            ref={(el) => {
+                                if (el) {
+                                    projectRefs.current.set(
+                                        project.id,
+                                        el
+                                    );
+                                }
+                            }}
+                        >
                             <img
                                 src={project.image_url}
                                 alt={project[`title_${currentLang}`] || ""}
