@@ -11,10 +11,10 @@ const resources = {
       services: 'Servicios',
       contact: 'Contacto',
       about_description:
-        'Soy un programador interesado en la búsqueda de soluciones creativas para entornos digitales. Me especializo en React, JavaScript y diseño de interfaces modernas.',
+        'Soy un programador interesado en la búsqueda de soluciones creativas para entornos digitales. Me especializo en JavaScript y sus respectivos frameworks y librerías: React, React Native, Next.js, orientadas al diseño y desarrollo de interfaces modernas.',
       education: 'Formación:',
       education_details:
-        '2022 - presente // Coderhouse, Potrero Digital, Argentina Programa.',
+        '2022 - presente // Coderhouse, Potrero Digital, Argentina Programa, UTN.',
       projects_description: 'Aquí están algunos de mis trabajos más recientes:',
       view_project: 'Ver Página',
       view_code: 'Código',
