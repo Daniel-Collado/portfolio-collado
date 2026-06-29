@@ -42,7 +42,7 @@ const resources = {
       services: 'Services',
       contact: 'Contact',
       about_description:
-        'I am a programmer passionate about finding creative solutions for digital environments. I specialize in React, JavaScript, and modern interface design.',
+        'I am a programmer interested in finding creative solutions for digital environments. I specialize in JavaScript and its frameworks and libraries—such as React, React Native, and Next.js—focusing on the design and development of modern interfaces.',
       education: 'Education:',
       education_details:
         '2022 - present // Coderhouse, Potrero Digital, Argentina Programa.',
