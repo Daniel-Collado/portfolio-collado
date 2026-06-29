@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { FaGithub, FaEnvelope, FaArrowUp } from "react-icons/fa";
-import { trackProjectOpen, trackGithubOpen, trackProjectVisible } from "../lib/analytics/analytics";
+import { FaGithub, FaEnvelope, FaLinkedin, FaArrowUp } from "react-icons/fa";
+import { trackProjectOpen, trackGithubOpen, trackProjectVisible, trackSocialOpen, } from "../lib/analytics/analytics";
 
 const PortfolioContent = ({
     activeSection,
@@ -158,10 +158,35 @@ const PortfolioContent = ({
             <div className="about-content">
                 <img src="/images/portfolio.jpeg" alt="Foto de perfil" className="profile-image" />
                 <div className="text-content">
-                <p className="section-text mb-4">{t("about_description")}</p>
-                <p className="section-text">
-                    <strong>{t("education")}</strong> {t("education_details")}
-                </p>
+                    <p className="section-text mb-4">{t("about_description")}</p>
+                    <p className="section-text">
+                        <strong>{t("education")}</strong> {t("education_details")}
+                    </p>
+                    <div className="about-social">
+                        <a
+                            href="https://www.linkedin.com/in/danielcolladodev"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="about-social-link"
+                            aria-label="LinkedIn"
+                            title="LinkedIn"
+                            onClick={() => trackSocialOpen("linkedin")}
+                        >
+                            <FaLinkedin aria-hidden="true" />
+                        </a>
+
+                        <a
+                            href="https://github.com/TU-USUARIO"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="about-social-link"
+                            aria-label="GitHub"
+                            title="GitHub"
+                            onClick={() => trackSocialOpen("github")}
+                        >
+                            <FaGithub aria-hidden="true" />
+                        </a>
+                    </div>
                 </div>
             </div>
             </section>

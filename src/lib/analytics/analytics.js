@@ -220,3 +220,12 @@ export async function trackThemeChange(theme) {
 export async function trackLanguageChange(language) {
     await trackEvent("language_changed", { language });
 }
+
+export async function trackSocialOpen(network) {
+    await trackEvent(
+        "social_open",
+        {
+            network,
+        }
+    );
+}

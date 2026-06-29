@@ -506,6 +506,50 @@ body {
   margin: 0 auto;
 }
 
+.about-social {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.8rem;
+    flex-wrap: wrap;
+}
+
+.about-social-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: clamp(40px, 3vw, 46px);
+    height: clamp(40px, 3vw, 46px);
+
+    border-radius: 999px;
+
+    background: var(--surface-1);
+    color: var(--text-primary);
+
+    border: 1px solid var(--border-subtle);
+
+    text-decoration: none;
+
+    transition:
+        background .25s ease,
+        color .25s ease,
+        border-color .25s ease,
+        transform .25s ease;
+}
+
+.about-social-link:hover {
+    background: var(--action);
+    color: var(--action-contrast);
+    border-color: var(--action);
+    transform: translateY(-2px);
+}
+
+.about-social-link svg {
+    font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+}
+
 /* Estilos para la sección Contacto */
 .contact-content {
   display: flex;
