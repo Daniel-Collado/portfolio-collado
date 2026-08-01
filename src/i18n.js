@@ -1,83 +1,95 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
 
 const resources = {
-  es: {
-    translation: {
-      welcome: 'Bienvenido a mi espacio digital',
-      about: 'Sobre mí',
-      projects: 'Ver Proyectos',
-      services: 'Servicios',
-      contact: 'Contacto',
-      about_description:
-        'Soy un programador interesado en la búsqueda de soluciones creativas para entornos digitales. Me especializo en JavaScript y sus respectivos frameworks y librerías: React, React Native, Next.js, orientadas al diseño y desarrollo de interfaces modernas.',
-      education: 'Formación:',
-      education_details:
-        '2022 - presente // Coderhouse, Potrero Digital, Argentina Programa, UTN.',
-      projects_description: 'Aquí están algunos de mis trabajos más recientes:',
-      view_project: 'Ver Página',
-      view_code: 'Código',
-      services_description:
-        'Realizo páginas web dinámicas y responsivas, adaptadas a las necesidades del cliente. Las mismas pueden ser desde una tienda e-commerce a un portfolio personal. Hago mantenimiento mensual del código, corrección de errores, sumo nuevas funcionalidades. Readapto la página a tus necesidades actuales.',
-      email_label: 'Correo:',
-      address: 'La Plata, Buenos Aires, Argentina',
-      form_name: 'Nombre',
-      form_email: 'Correo electrónico',
-      form_message: 'Mensaje',
-      form_name_placeholder: 'Ingresa tu nombre',
-      form_email_placeholder: 'Ingresa tu correo',
-      form_message_placeholder: 'Escribe tu mensaje aquí',
-      form_submit: 'Enviar mensaje',
-      form_success: '¡Mensaje enviado con éxito! Te contactaré pronto.',
-      form_error: 'Hubo un error al enviar el mensaje. Intenta de nuevo.',
-      form_error_missing_fields: 'Por favor, completa todos los campos.',
+    es: {
+        translation: {
+            welcome: "Bienvenido a mi espacio digital",
+            about: "Sobre mí",
+            works: "Trabajos",
+            formation: "Formación",
+            services: "Servicios",
+            contact: "Contacto",
+            about_description:
+                "Soy un programador interesado en la búsqueda de soluciones creativas para entornos digitales. Me especializo en JavaScript y sus respectivos frameworks y librerías: React, React Native, Next.js, orientadas al diseño y desarrollo de interfaces modernas.",
+            education: "Formación:",
+            education_details:
+                "2022 - presente // Coderhouse, Potrero Digital, Argentina Programa, UTN.",
+            projects_description:
+                "Aquí están algunos de mis trabajos más recientes:",
+            view_project: "Ver Página",
+            view_code: "Código",
+            formation_description:
+                "Cursos, certificaciones y formación profesional.",
+
+            view_certificate: "Ver certificado",
+            services_description:
+                "Realizo páginas web dinámicas y responsivas, adaptadas a las necesidades del cliente. Las mismas pueden ser desde una tienda e-commerce a un portfolio personal. Hago mantenimiento mensual del código, corrección de errores, sumo nuevas funcionalidades. Readapto la página a tus necesidades actuales.",
+            email_label: "Correo:",
+            address: "La Plata, Buenos Aires, Argentina",
+            form_name: "Nombre",
+            form_email: "Correo electrónico",
+            form_message: "Mensaje",
+            form_name_placeholder: "Ingresa tu nombre",
+            form_email_placeholder: "Ingresa tu correo",
+            form_message_placeholder: "Escribe tu mensaje aquí",
+            form_submit: "Enviar mensaje",
+            form_success: "¡Mensaje enviado con éxito! Te contactaré pronto.",
+            form_error: "Hubo un error al enviar el mensaje. Intenta de nuevo.",
+            form_error_missing_fields: "Por favor, completa todos los campos.",
+        },
     },
-  },
-  en: {
-    translation: {
-      welcome: 'Welcome to my digital space',
-      about: 'About me',
-      projects: 'View Projects',
-      services: 'Services',
-      contact: 'Contact',
-      about_description:
-        'I am a programmer interested in finding creative solutions for digital environments. I specialize in JavaScript and its frameworks and libraries—such as React, React Native, and Next.js—focusing on the design and development of modern interfaces.',
-      education: 'Education:',
-      education_details:
-        '2022 - present // Coderhouse, Potrero Digital, Argentina Programa.',
-      projects_description: 'Here are some of my most recent works:',
-      view_project: 'View Page',
-      view_code: 'Code',
-      services_description:
-        'I create dynamic and responsive websites tailored to the client’s needs, ranging from e-commerce stores to personal portfolios. I offer monthly code maintenance, bug fixes, and new feature additions. I adapt the website to your current needs.',
-      email_label: 'Email:',
-      address: 'La Plata, Buenos Aires, Argentina',
-      form_name: 'Name',
-      form_email: 'Email',
-      form_message: 'Message',
-      form_name_placeholder: 'Enter your name',
-      form_email_placeholder: 'Enter your email',
-      form_message_placeholder: 'Write your message here',
-      form_submit: 'Send message',
-      form_success: 'Message sent successfully! I’ll get back to you soon.',
-      form_error: 'There was an error sending the message. Please try again.',
-      form_error_missing_fields: 'Please fill in all fields.',
+    en: {
+        translation: {
+            welcome: "Welcome to my digital space",
+            about: "About me",
+            works: "Work",
+            formation: "Education",
+            services: "Services",
+            contact: "Contact",
+            about_description:
+                "I am a programmer interested in finding creative solutions for digital environments. I specialize in JavaScript and its frameworks and libraries—such as React, React Native, and Next.js—focusing on the design and development of modern interfaces.",
+            education: "Education:",
+            education_details:
+                "2022 - present // Coderhouse, Potrero Digital, Argentina Programa.",
+            projects_description: "Here are some of my most recent works:",
+            view_project: "View Page",
+            view_code: "Code",
+            formation_description:
+                "Courses, certifications and professional education.",
+
+            view_certificate: "View certificate",
+            services_description:
+                "I create dynamic and responsive websites tailored to the client’s needs, ranging from e-commerce stores to personal portfolios. I offer monthly code maintenance, bug fixes, and new feature additions. I adapt the website to your current needs.",
+            email_label: "Email:",
+            address: "La Plata, Buenos Aires, Argentina",
+            form_name: "Name",
+            form_email: "Email",
+            form_message: "Message",
+            form_name_placeholder: "Enter your name",
+            form_email_placeholder: "Enter your email",
+            form_message_placeholder: "Write your message here",
+            form_submit: "Send message",
+            form_success:
+                "Message sent successfully! I’ll get back to you soon.",
+            form_error:
+                "There was an error sending the message. Please try again.",
+            form_error_missing_fields: "Please fill in all fields.",
+        },
     },
-  },
 };
 
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    resources,
-    fallbackLng: 'es',
-    supportedLngs: ['es', 'en'],          // 👈 limita idiomas válidos
-    nonExplicitSupportedLngs: true,       // 👈 normaliza en-US → en, es-AR → es
-    interpolation: {
-      escapeValue: false,
-    },
-  });
+i18n.use(LanguageDetector)
+    .use(initReactI18next)
+    .init({
+        resources,
+        fallbackLng: "es",
+        supportedLngs: ["es", "en"], // 👈 limita idiomas válidos
+        nonExplicitSupportedLngs: true, // 👈 normaliza en-US → en, es-AR → es
+        interpolation: {
+            escapeValue: false,
+        },
+    });
 
 export default i18n;

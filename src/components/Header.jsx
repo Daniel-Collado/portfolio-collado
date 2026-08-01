@@ -2,66 +2,74 @@
 
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { trackSectionView, } from "../lib/analytics/analytics";
+import { trackSectionView } from "../lib/analytics/analytics";
 
 const Header = ({ activeSection, setActiveSection, className }) => {
     const { t } = useTranslation();
 
-    const handleNavLinkClick = (
-    sectionId) => {
+    const handleNavLinkClick = (sectionId) => {
         if (activeSection === sectionId) {
             return;
         }
         setActiveSection(sectionId);
         trackSectionView(sectionId);
-        };
+    };
 
     return (
         <header className={className}>
-        {/* Título principal */}
-        <h1 className="header-title">Daniel Collado || Portfolio</h1>
+            {/* Título principal */}
+            <h1 className="header-title">Daniel Collado || Portfolio</h1>
 
-        {/* Texto de bienvenida */}
-        <p className="header-text">{t("welcome")}</p>
+            {/* Texto de bienvenida */}
+            <p className="header-text">{t("welcome")}</p>
 
-        {/* Navegación */}
-        <nav className="header-nav">
-            <button
-            onClick={() => handleNavLinkClick("sobre-mi")}
-            className={`nav-button ${
-                activeSection === "sobre-mi" ? "active" : ""
-            }`}
-            >
-            {t("about")}
-            </button>
+            {/* Navegación */}
+            <nav className="header-nav">
+                <button
+                    onClick={() => handleNavLinkClick("sobre-mi")}
+                    className={`nav-button ${
+                        activeSection === "sobre-mi" ? "active" : ""
+                    }`}
+                >
+                    {t("about")}
+                </button>
 
-            <button
-            onClick={() => handleNavLinkClick("proyectos")}
-            className={`nav-button ${
-                activeSection === "proyectos" ? "active" : ""
-            }`}
-            >
-            {t("projects")}
-            </button>
+                <button
+                    onClick={() => handleNavLinkClick("proyectos")}
+                    className={`nav-button ${
+                        activeSection === "proyectos" ? "active" : ""
+                    }`}
+                >
+                    {t("works")}
+                </button>
 
-            <button
-            onClick={() => handleNavLinkClick("servicios")}
-            className={`nav-button ${
-                activeSection === "servicios" ? "active" : ""
-            }`}
-            >
-            {t("services")}
-            </button>
+                <button
+                    onClick={() => handleNavLinkClick("formacion")}
+                    className={`nav-button ${
+                        activeSection === "formacion" ? "active" : ""
+                    }`}
+                >
+                    {t("formation")}
+                </button>
 
-            <button
-            onClick={() => handleNavLinkClick("contacto")}
-            className={`nav-button ${
-                activeSection === "contacto" ? "active" : ""
-            }`}
-            >
-            {t("contact")}
-            </button>
-        </nav>
+                <button
+                    onClick={() => handleNavLinkClick("servicios")}
+                    className={`nav-button ${
+                        activeSection === "servicios" ? "active" : ""
+                    }`}
+                >
+                    {t("services")}
+                </button>
+
+                <button
+                    onClick={() => handleNavLinkClick("contacto")}
+                    className={`nav-button ${
+                        activeSection === "contacto" ? "active" : ""
+                    }`}
+                >
+                    {t("contact")}
+                </button>
+            </nav>
         </header>
     );
 };
