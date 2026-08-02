@@ -1,63 +1,76 @@
-# Refactor Portfolio – Sección Formación
+Refactor Portfolio – Sección Formación
+Objetivo
 
-## Objetivo
+Agregar una sección pública de Formación integrada con el panel de administración, reutilizando la arquitectura existente del portfolio y evitando duplicación de lógica o componentes.
 
-Agregar una nueva sección "Formación" manteniendo la arquitectura existente del portfolio.
-
-No se busca una implementación rápida, sino consistente con el resto del proyecto.
-
----
-
-## Decisiones tomadas
-
-- La sección "Ver Proyectos" pasa a llamarse "Trabajos".
-- La colección de Firestore continúa llamándose `projects`.
-- Se agrega una nueva colección `education`.
-- Todo el contenido deberá administrarse desde el panel admin.
-- No habrá certificados hardcodeados.
-- La sección pública consumirá únicamente Firestore.
-- Se mantiene i18n para español e inglés.
-- Se mantiene Analytics.
-- Se mantiene lazy loading de Firebase.
-
----
-
-## Arquitectura objetivo
-
+Decisiones arquitectónicas
+La sección pública Trabajos continúa consumiendo la colección projects.
+La nueva sección pública Formación consume exclusivamente la colección education.
+El panel de administración es el único punto de edición de certificaciones.
+Los certificados se almacenan en Cloudinary.
+Firestore contiene únicamente la información estructurada y las URLs de los certificados.
+Se mantiene i18n para toda la sección.
+Se mantiene Analytics como infraestructura compartida.
+Se mantiene lazy loading de Firebase.
+Arquitectura
 Portfolio
 
-├── Trabajos (projects)
-
-└── Formación (education)
+├── Trabajos
+│ └── projects
+│
+└── Formación
+└── education
 
 Panel Admin
 
 ├── ProjectsManager
-
 └── EducationManager
+Estado actual
+Administración
 
----
+✔ AdminPanel desacoplado.
 
-## Estado actual
+✔ EducationManager implementado.
 
-✔ ProjectsSection extraído de PortfolioContent.
+✔ CRUD completo de certificaciones.
 
-✔ Header actualizado con "Trabajos" y "Formación".
+✔ Integración con Firestore.
 
-✔ AdminPanel separado del dominio.
+✔ Integración con Cloudinary.
 
-✔ Logout pertenece a AdminPanel.
+✔ Reordenamiento dentro de cada institución.
 
-✔ ProjectsManager creado.
+✔ Orden automático por categoría.
 
-✔ EducationSection creado y preparado para Firestore.
+✔ Eliminación con renumeración.
 
-⏳ Pendiente:
+✔ Edición con categoría bloqueada.
 
-- terminar ProjectsManager tras el refactor
-- implementar EducationManager
-- crear CRUD de education
-- subir certificados a Cloudinary
-- mostrar certificado en pantalla pública
-- agregar Analytics de certificados
-- reutilizar estilos entre Projects y Education
+Público
+
+✔ EducationSection consume Firestore.
+
+✔ Agrupación por institución (category).
+
+✔ Acordeón con una institución abierta a la vez.
+
+✔ Lista de certificaciones por institución.
+
+✔ Modal de visualización del certificado.
+
+✔ Scroll del fondo bloqueado mientras el modal permanece abierto.
+
+✔ Soporte para certificados en imagen.
+
+✔ Soporte para certificados PDF mediante transformación de Cloudinary (pg_1,f_jpg) para generar una vista previa como imagen.
+
+✔ Integración con i18n.
+
+✔ Reutilización parcial del estilo de ProjectsSection sin duplicar componentes.
+
+Pendiente
+Analytics específico para certificados:
+apertura del modal;
+apertura de la credencial oficial.
+Revisar la experiencia mobile del modal (zoom si fuera necesario).
+Evaluar página individual de certificado (/education/:slug) si en el futuro aporta valor para SEO o compartir enlaces.

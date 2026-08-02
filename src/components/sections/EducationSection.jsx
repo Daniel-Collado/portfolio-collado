@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import CertificateModal from "../education/CertificateModal";
 
 let cachedEducation = null;
 
-const EducationSection = () => {
-    const { t } = useTranslation();
-
+const EducationSection = ({ titleKey }) => {
+    const { t, i18n } = useTranslation();
+    const currentLang = i18n.language.split("-")[0];
     const [groups, setGroups] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [openCategory, setOpenCategory] = useState(null);
+    const [selectedCertificate, setSelectedCertificate] = useState(null);
 
     useEffect(() => {
         if (cachedEducation) {
@@ -79,75 +81,94 @@ const EducationSection = () => {
     };
 
     return (
-        <section id="formacion" className="section-container">
-            <h2 className="section-title animate-title">{t("formation")}</h2>
+        <section id="formacion" className="section-container education-section">
+            <div className="education-content">
+                <h2 key={titleKey} className="section-title animate-title">
+                    {t("formation")}
+                </h2>
 
-            <p className="section-text">{t("formation_description")}</p>
+                <p className="section-text">{t("formation_description")}</p>
 
-            {loading && <p className="section-text">Cargando formación...</p>}
+                {loading && (
+                    <p className="section-text">Cargando formación...</p>
+                )}
 
-            {error && <p className="section-text">{error}</p>}
+                {error && <p className="section-text">{error}</p>}
 
-            {!loading && !error && (
-                <div
-                    style={{
-                        width: "100%",
-                        marginTop: "2rem",
-                    }}
-                >
-                    {groups.map((group) => (
-                        <div
-                            key={group.category}
-                            style={{
-                                marginBottom: "1.5rem",
-                            }}
-                        >
-                            <button
-                                type="button"
-                                className="nav-button"
+                {!loading && !error && (
+                    <div
+                        style={{
+                            width: "100%",
+                            marginTop: "2rem",
+                        }}
+                    >
+                        {groups.map((group) => (
+                            <div
+                                key={group.category}
                                 style={{
-                                    width: "100%",
-                                    display: "flex",
-                                    justifyContent: "space-between",
+                                    marginBottom: "1.5rem",
                                 }}
-                                onClick={() => toggleCategory(group.category)}
                             >
-                                <span>{group.category}</span>
+                                <button
+                                    type="button"
+                                    className="nav-button"
+                                    style={{
+                                        width: "100%",
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                    }}
+                                    onClick={() =>
+                                        toggleCategory(group.category)
+                                    }
+                                >
+                                    <span>{group.category}</span>
 
-                                <span>({group.items.length})</span>
-                            </button>
+                                    <span>({group.items.length})</span>
+                                </button>
 
-                            {openCategory === group.category && (
-                                <div className="projects-grid">
-                                    {group.items.map((course) => (
-                                        <div
-                                            key={course.id}
-                                            className="project-card"
-                                        >
-                                            <h3 className="project-title">
-                                                {course.title}
-                                            </h3>
+                                {openCategory === group.category && (
+                                    <div className="education-list">
+                                        {group.items.map((course) => (
+                                            <div
+                                                key={course.id}
+                                                className="education-row"
+                                            >
+                                                <div className="education-info">
+                                                    <h3 className="education-title">
+                                                        {course[
+                                                            `title_${currentLang}`
+                                                        ] || "Sin título"}
+                                                    </h3>
 
-                                            <p className="section-text">
-                                                {course.year}
-                                            </p>
+                                                    <span className="education-year">
+                                                        {course.year}
+                                                    </span>
+                                                </div>
 
-                                            <div className="project-links">
                                                 <button
                                                     type="button"
                                                     className="project-link"
+                                                    onClick={() =>
+                                                        setSelectedCertificate(
+                                                            course
+                                                        )
+                                                    }
                                                 >
                                                     {t("view_certificate")}
                                                 </button>
                                             </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </div>
-            )}
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )}
+                <CertificateModal
+                    certificate={selectedCertificate}
+                    onClose={() => setSelectedCertificate(null)}
+                />
+            </div>
         </section>
     );
 };

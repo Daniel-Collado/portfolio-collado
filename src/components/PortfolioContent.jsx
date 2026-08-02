@@ -5,6 +5,7 @@ import { FaGithub, FaEnvelope, FaLinkedin, FaArrowUp } from "react-icons/fa";
 import { trackSocialOpen } from "../lib/analytics/analytics";
 
 import ProjectsSection from "./sections/ProjectsSection";
+import EducationSection from "./sections/EducationSection";
 
 const PortfolioContent = ({
     activeSection,
@@ -102,16 +103,12 @@ const PortfolioContent = ({
             )}
 
             {/* PROYECTOS */}
-            {activeSection === "proyectos" && <ProjectsSection />}
+            {activeSection === "proyectos" && (
+                <ProjectsSection titleKey={titleKey} />
+            )}
 
             {activeSection === "formacion" && (
-                <section id="formacion" className="section-container">
-                    <h2 key={titleKey} className="section-title animate-title">
-                        {t("formation")}
-                    </h2>
-
-                    <p className="section-text">Próximamente...</p>
-                </section>
+                <EducationSection titleKey={titleKey} />
             )}
 
             {/* SERVICIOS */}
