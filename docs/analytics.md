@@ -6,14 +6,14 @@ Incorporar analítica web al portfolio público manteniendo una arquitectura lim
 
 Requisitos definidos:
 
-* medir visitas reales del portfolio
-* excluir completamente panel admin
-* excluir login admin
-* evitar doble inicialización
-* evitar eventos falsos por React Strict Mode
-* mantener compatibilidad con lazy loading
-* mantener Vite SPA (sin SSR)
-* preparar eventos futuros sin acoplar UI y tracking
+- medir visitas reales del portfolio
+- excluir completamente panel admin
+- excluir login admin
+- evitar doble inicialización
+- evitar eventos falsos por React Strict Mode
+- mantener compatibilidad con lazy loading
+- mantener Vite SPA (sin SSR)
+- preparar eventos futuros sin acoplar UI y tracking
 
 ---
 
@@ -21,23 +21,23 @@ Requisitos definidos:
 
 Frontend:
 
-* React 19
-* Vite
-* React Router DOM v7
+- React 19
+- Vite
+- React Router DOM v7
 
 Servicios:
 
-* Firebase
-* Firestore
-* EmailJS
-* Cloudinary
+- Firebase
+- Firestore
+- EmailJS
+- Cloudinary
 
 Arquitectura existente preservada:
 
-* lazy imports
-* temas dinámicos
-* internacionalización (`react-i18next`)
-* panel admin desacoplado
+- lazy imports
+- temas dinámicos
+- internacionalización (`react-i18next`)
+- panel admin desacoplado
 
 ---
 
@@ -53,11 +53,11 @@ Google Tag Manager.
 
 Motivos:
 
-* menor complejidad
-* menor peso
-* menos puntos de falla
-* integración nativa con Firebase ya existente
-* suficiente para portfolio personal
+- menor complejidad
+- menor peso
+- menos puntos de falla
+- integración nativa con Firebase ya existente
+- suficiente para portfolio personal
 
 ---
 
@@ -115,10 +115,10 @@ inicialización única
 
 Propiedades:
 
-* singleton
-* sin doble init
-* sin SSR
-* compatible con Strict Mode
+- singleton
+- sin doble init
+- sin SSR
+- compatible con Strict Mode
 
 ---
 
@@ -207,16 +207,17 @@ Secciones medidas:
 ```txt
 sobre-mi
 proyectos
+formacion
 servicios
 contacto
 ```
 
 Protecciones:
 
-* sin duplicados
-* sin medir scroll
-* sin medir renders
-* sin medir cambios de idioma
+- sin duplicados
+- sin medir scroll
+- sin medir renders
+- sin medir cambios de idioma
 
 ---
 
@@ -277,6 +278,55 @@ Payload:
 ```txt
 project_name
 ```
+
+---
+
+## certificate_open
+
+Disparo:
+
+```txt
+click "Ver certificado"
+```
+
+Payload:
+
+```txt
+certificate_name
+
+category
+```
+
+Observaciones:
+
+- se dispara únicamente por interacción explícita del usuario
+- utiliza `title_es` como identificador estable del certificado
+- no se dispara al abrir o cerrar acordeones
+- no se dispara por render
+
+---
+
+## credential_open
+
+Disparo:
+
+```txt
+click "Ver credencial oficial"
+```
+
+Payload:
+
+```txt
+certificate_name
+
+category
+```
+
+Observaciones:
+
+- solo se registra cuando existe `credential_url`
+- se dispara inmediatamente antes de abrir la credencial oficial
+- utiliza `title_es` como identificador estable del certificado
 
 ---
 
@@ -382,9 +432,9 @@ Confirmado:
 
 Google Analytics:
 
-* Tiempo real responde antes que reportes históricos
-* localhost puede no reflejar inmediatamente métricas agregadas
-* entornos corporativos pueden bloquear parcialmente Analytics
+- Tiempo real responde antes que reportes históricos
+- localhost puede no reflejar inmediatamente métricas agregadas
+- entornos corporativos pueden bloquear parcialmente Analytics
 
 Conclusión:
 
@@ -406,16 +456,20 @@ Implementado:
 
 ✔ eventos personalizados
 
+✔ tracking de proyectos
+
+✔ tracking de formación
+
 ✔ exclusión admin
 
 ✔ integración desacoplada
 
 Pendiente futuro:
 
-* presets de tema
-* scroll depth
-* tiempo por sección
-* embudo de contacto
-* métricas por dispositivo
-* exportación de reportes
-* dashboards personalizados
+- presets de tema
+- scroll depth
+- tiempo por sección
+- embudo de contacto
+- métricas por dispositivo
+- exportación de reportes
+- dashboards personalizados

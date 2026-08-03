@@ -1,4 +1,4 @@
-#  Daniel Collado — Portfolio Personal
+# Daniel Collado — Portfolio Personal
 
 Este es el repositorio de mi portfolio personal, desarrollado con foco en arquitectura moderna, diseño tokenizado, accesibilidad y temas personalizables. Construido con **React + Vite**, incorpora múltiples temas visuales, animaciones fluidas, y un panel de configuración interactivo.
 
@@ -21,17 +21,19 @@ Este es el repositorio de mi portfolio personal, desarrollado con foco en arquit
 
 Implementación actual:
 
-* 🔥 Google Analytics 4 mediante Firebase Analytics
-* 📈 Medición SPA (React Router)
-* 🚫 Exclusión explícita de `/admin` y `/adminlogin`
-* 🧭 Tracking de navegación interna por secciones
-* 🌍 Eventos de idioma
-* 🎨 Eventos de tema
-* 📧 Eventos de contacto
-* 🔗 Eventos de apertura de proyectos
-* 🔎 Integración con Google Search Console
-* 🗺 Sitemap enviado y validado
-* 🤖 Robots configurado para evitar indexación del panel
+- 🔥 Google Analytics 4 mediante Firebase Analytics
+- 📈 Medición SPA (React Router)
+- 🚫 Exclusión explícita de `/admin` y `/adminlogin`
+- 🧭 Tracking de navegación interna por secciones
+- 🔗 Eventos de interacción con proyectos
+- 🎓 Eventos de interacción con certificados y credenciales
+- 👥 Eventos de interacción con redes sociales
+- 🌍 Eventos de idioma
+- 🎨 Eventos de tema
+- 📧 Eventos de contacto
+- 🔎 Integración con Google Search Console
+- 🗺 Sitemap enviado y validado
+- 🤖 Robots configurado para evitar indexación del panel
 
 Eventos implementados:
 
@@ -43,6 +45,12 @@ section_view
 project_open
 
 project_github_open
+
+certificate_open
+
+credential_open
+
+social_open
 
 contact_submit
 
@@ -85,12 +93,12 @@ Firebase Analytics
 
 > El usuario puede alternar entre **4 modos visuales** desde el panel lateral de configuración:
 
-| Tipo     | Modo       | Descripción |
-|----------|------------|-------------|
-| ☀️ Light | `light-a`  | Paleta clara con acentos suaves |
-| ☀️ Light | `light-b`  | Paleta clara alternativa con más contraste |
-| 🌙 Dark  | `dark-a`   | Estilo oscuro tradicional, alto contraste |
-| 🌙 Dark  | `dark-b`   | Paleta refinada, en fase de pulido fino |
+| Tipo     | Modo      | Descripción                                |
+| -------- | --------- | ------------------------------------------ |
+| ☀️ Light | `light-a` | Paleta clara con acentos suaves            |
+| ☀️ Light | `light-b` | Paleta clara alternativa con más contraste |
+| 🌙 Dark  | `dark-a`  | Estilo oscuro tradicional, alto contraste  |
+| 🌙 Dark  | `dark-b`  | Paleta refinada, en fase de pulido fino    |
 
 Los temas se aplican dinámicamente mediante:
 
@@ -102,3 +110,4 @@ document.documentElement.dataset.theme = "dark-b"
 📄 Licencia
 
 Este proyecto es personal. Si querés reutilizar partes de la arquitectura, diseño o lógica, consultame antes :)
+```
