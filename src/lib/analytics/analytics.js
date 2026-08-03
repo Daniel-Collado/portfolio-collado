@@ -6,66 +6,47 @@ export async function getAnalyticsInstance() {
         return analyticsInstance;
     }
 
-    const measurementId =
-        import.meta.env.VITE_FIREBASE_MEASUREMENT_ID;
+    const measurementId = import.meta.env.VITE_FIREBASE_MEASUREMENT_ID;
 
     if (!measurementId) {
         return null;
     }
 
-    const [
-        analyticsModule,
-        { initializeApp, getApps, getApp },
-    ] = await Promise.all([
-        import("firebase/analytics"),
-        import("firebase/app"),
-    ]);
+    const [analyticsModule, { initializeApp, getApps, getApp }] =
+        await Promise.all([
+            import("firebase/analytics"),
+            import("firebase/app"),
+        ]);
 
-    const {
-        getAnalytics,
-        isSupported,
-        logEvent,
-    } = analyticsModule;
+    const { getAnalytics, isSupported, logEvent } = analyticsModule;
 
     logEventFn = logEvent;
 
-    const supported =
-        await isSupported();
+    const supported = await isSupported();
 
     if (!supported) {
         return null;
     }
 
     const firebaseConfig = {
-        apiKey:
-            import.meta.env.VITE_FIREBASE_API_KEY,
+        apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
 
-        authDomain:
-            import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+        authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
 
-        projectId:
-            import.meta.env.VITE_FIREBASE_PROJECT_ID,
+        projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
 
-        storageBucket:
-            import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+        storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
 
-        messagingSenderId:
-            import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+        messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
 
-        appId:
-            import.meta.env.VITE_FIREBASE_APP_ID,
+        appId: import.meta.env.VITE_FIREBASE_APP_ID,
 
         measurementId,
     };
 
-    const app =
-        getApps().length
-            ? getApp()
-            : initializeApp(firebaseConfig);
+    const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-    analyticsInstance =
-        getAnalytics(app);
-
+    analyticsInstance = getAnalytics(app);
 
     return analyticsInstance;
 }
@@ -73,10 +54,7 @@ export async function getAnalyticsInstance() {
 let lastTracked = "";
 
 export async function trackPageView(path) {
-    if (
-        path.startsWith("/admin") ||
-        path === "/adminlogin"
-    ) {
+    if (path.startsWith("/admin") || path === "/adminlogin") {
         return;
     }
 
@@ -86,131 +64,75 @@ export async function trackPageView(path) {
 
     lastTracked = path;
 
-    const analytics =
-        await getAnalyticsInstance();
+    const analytics = await getAnalyticsInstance();
 
     if (!analytics) {
         return;
     }
 
-    logEventFn(
-        analytics,
-        "page_view",
-        {
-            page_path: path,
-        }
-    );
+    logEventFn(analytics, "page_view", {
+        page_path: path,
+    });
 }
 
-export async function trackEvent(
-    eventName,
-    params = {}
-) {
-    const analytics =
-        await getAnalyticsInstance();
+export async function trackEvent(eventName, params = {}) {
+    const analytics = await getAnalyticsInstance();
 
     if (!analytics) {
         return;
     }
 
-    logEventFn(
-        analytics,
-        eventName,
-        params
-    );
+    logEventFn(analytics, eventName, params);
 }
 
 let lastSection = "";
 
-const visibleProjects =
-    new Set();
+const visibleProjects = new Set();
 
-export async function trackSectionView(
-    section
-) {
-    if (
-        !section ||
-        section === lastSection
-    ) {
+export async function trackSectionView(section) {
+    if (!section || section === lastSection) {
         return;
     }
 
-    lastSection =
-        section;
+    lastSection = section;
 
-    await trackEvent(
-        "section_view",
-        {
-            section_name:
-                section,
-        }
-    );
+    await trackEvent("section_view", {
+        section_name: section,
+    });
 }
 
-export async function trackProjectOpen(
-    project
-) {
-    await trackEvent(
-        "project_open",
-        {
-            project_name:
-                project,
-        }
-    );
+export async function trackProjectOpen(project) {
+    await trackEvent("project_open", {
+        project_name: project,
+    });
 }
 
-export async function trackGithubOpen(
-    project
-) {
-    await trackEvent(
-        "project_github_open",
-        {
-            project_name:
-                project,
-        }
-    );
+export async function trackGithubOpen(project) {
+    await trackEvent("project_github_open", {
+        project_name: project,
+    });
 }
 
-export async function trackProjectVisible(
-    project
-) {
-    if (
-        !project ||
-        visibleProjects.has(
-            project
-        )
-    ) {
+export async function trackProjectVisible(project) {
+    if (!project || visibleProjects.has(project)) {
         return;
     }
 
-    visibleProjects.add(
-        project
-    );
+    visibleProjects.add(project);
 
-    await trackEvent(
-        "project_visible",
-        {
-            project_name:
-                project,
-        }
-    );
+    await trackEvent("project_visible", {
+        project_name: project,
+    });
 }
 
 export async function trackContactSubmit() {
-    await trackEvent(
-        "contact_submit"
-    );
+    await trackEvent("contact_submit");
 }
 
-export async function trackContactSubmitError(
-    reason
-) {
-    await trackEvent(
-        "contact_submit_error",
-        {
-            reason,
-        }
-    );
+export async function trackContactSubmitError(reason) {
+    await trackEvent("contact_submit_error", {
+        reason,
+    });
 }
 
 export async function trackThemeChange(theme) {
@@ -222,10 +144,21 @@ export async function trackLanguageChange(language) {
 }
 
 export async function trackSocialOpen(network) {
-    await trackEvent(
-        "social_open",
-        {
-            network,
-        }
-    );
+    await trackEvent("social_open", {
+        network,
+    });
+}
+
+export async function trackCertificateOpen(title, category) {
+    await trackEvent("certificate_open", {
+        certificate_name: title,
+        category,
+    });
+}
+
+export async function trackCredentialOpen(title, category) {
+    await trackEvent("credential_open", {
+        certificate_name: title,
+        category,
+    });
 }

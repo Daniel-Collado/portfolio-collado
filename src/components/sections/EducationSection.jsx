@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CertificateModal from "../education/CertificateModal";
+import { trackCertificateOpen } from "../../lib/analytics/analytics";
 
 let cachedEducation = null;
 
@@ -148,11 +149,16 @@ const EducationSection = ({ titleKey }) => {
                                                 <button
                                                     type="button"
                                                     className="project-link"
-                                                    onClick={() =>
+                                                    onClick={() => {
+                                                        trackCertificateOpen(
+                                                            course.title_es,
+                                                            course.category
+                                                        );
+
                                                         setSelectedCertificate(
                                                             course
-                                                        )
-                                                    }
+                                                        );
+                                                    }}
                                                 >
                                                     {t("view_certificate")}
                                                 </button>

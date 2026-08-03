@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import "./CertificateModal.css";
+import { trackCredentialOpen } from "../../lib/analytics/analytics";
 
 const CertificateModal = ({ certificate, onClose }) => {
     useEffect(() => {
@@ -59,6 +60,12 @@ const CertificateModal = ({ certificate, onClose }) => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="project-link"
+                        onClick={() =>
+                            trackCredentialOpen(
+                                certificate.title_es,
+                                certificate.category
+                            )
+                        }
                     >
                         Ver credencial oficial
                     </a>

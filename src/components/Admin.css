@@ -58,7 +58,7 @@
 
 .admin-title {
     font-family: var(--font-heading);
-    font-size: clamp(1.8rem, 3vw, 2.3rem);
+    font-size: clamp(1.4rem, 2vw, 1.8rem);
     font-weight: 700;
     color: var(--heading-color);
     margin: 0;
@@ -349,7 +349,7 @@
     }
 
     .admin-title {
-        font-size: clamp(2rem, 9vw, 2.6rem);
+        font-size: clamp(1.15rem, 4.5vw, 1.4rem);
         line-height: 1.1;
     }
 
