@@ -9,6 +9,7 @@
     align-items: center;
 
     padding: 2rem;
+    box-sizing: border-box;
 
     z-index: 9999;
 }
@@ -19,7 +20,7 @@
     width: min(900px, 95vw);
     max-height: 90vh;
 
-    overflow-y: auto;
+    overflow: hidden;
 
     background: var(--section-bg);
     border: 1px solid var(--section-border);
@@ -30,16 +31,34 @@
     text-align: center;
 
     box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.certificate-modal-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    flex: 0 0 auto;
+    min-height: 42px;
+    margin-bottom: 0.5rem;
+}
+
+.certificate-modal-body {
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-gutter: stable;
 }
 
 .certificate-modal-close {
-    position: absolute;
-
-    top: 16px;
-    right: 16px;
+    position: relative;
 
     width: 42px;
     height: 42px;
+    flex: 0 0 42px;
+    margin-top: -0.5rem;
+    margin-right: -0.5rem;
 
     display: flex;
     align-items: center;
@@ -119,17 +138,29 @@
 
 @media (max-width: 768px) {
     .certificate-modal-backdrop {
-        padding: 0.75rem;
-        align-items: flex-start;
+        align-items: center;
+        padding: max(1rem, env(safe-area-inset-top))
+            max(0.75rem, env(safe-area-inset-right))
+            max(1rem, env(safe-area-inset-bottom))
+            max(0.75rem, env(safe-area-inset-left));
     }
 
     .certificate-modal {
+        width: min(900px, 100%);
         padding: 1rem;
-        margin-top: max(0.5rem, env(safe-area-inset-top));
-        max-height: calc(100dvh - 1.5rem);
+        max-height: calc(
+            100dvh - max(1rem, env(safe-area-inset-top)) -
+                max(1rem, env(safe-area-inset-bottom))
+        );
     }
 
     .certificate-modal-image {
         max-height: 60vh;
     }
+}
+
+:root:has(.certificate-modal-backdrop) .settings-button {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
 }

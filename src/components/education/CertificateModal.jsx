@@ -51,42 +51,46 @@ const CertificateModal = ({ certificate, onClose }) => {
                 tabIndex="-1"
                 onMouseDown={(e) => e.stopPropagation()}
             >
-                <button
-                    className="certificate-modal-close"
-                    onClick={onClose}
-                    aria-label={t("close_certificate")}
-                >
-                    ×
-                </button>
-
-                <img
-                    src={previewUrl}
-                    alt={t("certificate_preview_alt", {
-                        title: localizedTitle,
-                    })}
-                    className="certificate-modal-image"
-                />
-
-                <h3 id="certificate-modal-title">{localizedTitle}</h3>
-
-                <p>{certificate.year}</p>
-
-                {certificate.credential_url && (
-                    <a
-                        href={certificate.credential_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="project-link"
-                        onClick={() =>
-                            trackCredentialOpen(
-                                certificate.title_es,
-                                certificate.category
-                            )
-                        }
+                <div className="certificate-modal-toolbar">
+                    <button
+                        className="certificate-modal-close"
+                        onClick={onClose}
+                        aria-label={t("close_certificate")}
                     >
-                        {t("view_official_credential")}
-                    </a>
-                )}
+                        ×
+                    </button>
+                </div>
+
+                <div className="certificate-modal-body">
+                    <img
+                        src={previewUrl}
+                        alt={t("certificate_preview_alt", {
+                            title: localizedTitle,
+                        })}
+                        className="certificate-modal-image"
+                    />
+
+                    <h3 id="certificate-modal-title">{localizedTitle}</h3>
+
+                    <p>{certificate.year}</p>
+
+                    {certificate.credential_url && (
+                        <a
+                            href={certificate.credential_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="project-link"
+                            onClick={() =>
+                                trackCredentialOpen(
+                                    certificate.title_es,
+                                    certificate.category
+                                )
+                            }
+                        >
+                            {t("view_official_credential")}
+                        </a>
+                    )}
+                </div>
             </div>
         </div>
     );
