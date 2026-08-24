@@ -9,6 +9,7 @@ import EducationSection from "./sections/EducationSection";
 
 const PortfolioContent = ({
     activeSection,
+    focusSectionAfterScroll,
     scrollToTop,
     formData,
     status,
@@ -36,16 +37,19 @@ const PortfolioContent = ({
         }
 
         const section = document.getElementById(activeSection);
-        let cleanupFocusAfterScroll = () => {};
-
         if (section) {
             const reduceMotion = window.matchMedia(
-                "(prefers-reduced-motion: reduce)",
+                "(prefers-reduced-motion: reduce)"
             ).matches;
 
             section.scrollIntoView({
                 behavior: reduceMotion ? "auto" : "smooth",
             });
+
+            if (!focusSectionAfterScroll) {
+                setTitleKey((prev) => prev + 1);
+                return;
+            }
 
             const focusSectionTitle = () => {
                 section.querySelector("h2")?.focus({ preventScroll: true });
@@ -53,19 +57,19 @@ const PortfolioContent = ({
 
             if (reduceMotion) {
                 const frameId = window.requestAnimationFrame(focusSectionTitle);
-                cleanupFocusAfterScroll = () =>
-                    window.cancelAnimationFrame(frameId);
-            } else if (
-                "onscrollend" in document ||
-                "onscrollend" in window
-            ) {
+                setTitleKey((prev) => prev + 1);
+
+                return () => window.cancelAnimationFrame(frameId);
+            }
+
+            if ("onscrollend" in document || "onscrollend" in window) {
                 const scrollEndTarget =
                     "onscrollend" in document ? document : window;
                 let safetyTimerId;
                 const handleScrollEnd = () => {
                     scrollEndTarget.removeEventListener(
                         "scrollend",
-                        handleScrollEnd,
+                        handleScrollEnd
                     );
                     window.clearTimeout(safetyTimerId);
                     focusSectionTitle();
@@ -75,46 +79,47 @@ const PortfolioContent = ({
                     once: true,
                 });
                 safetyTimerId = window.setTimeout(handleScrollEnd, 2000);
-                cleanupFocusAfterScroll = () => {
+                setTitleKey((prev) => prev + 1);
+
+                return () => {
                     scrollEndTarget.removeEventListener(
                         "scrollend",
-                        handleScrollEnd,
+                        handleScrollEnd
                     );
                     window.clearTimeout(safetyTimerId);
                 };
-            } else {
-                let settleTimerId;
-                let safetyTimerId;
-
-                const finishAfterScroll = () => {
-                    window.removeEventListener("scroll", handleScroll);
-                    window.clearTimeout(settleTimerId);
-                    window.clearTimeout(safetyTimerId);
-                    focusSectionTitle();
-                };
-
-                const handleScroll = () => {
-                    window.clearTimeout(settleTimerId);
-                    settleTimerId = window.setTimeout(finishAfterScroll, 120);
-                };
-
-                window.addEventListener("scroll", handleScroll, {
-                    passive: true,
-                });
-                safetyTimerId = window.setTimeout(finishAfterScroll, 2000);
-
-                cleanupFocusAfterScroll = () => {
-                    window.removeEventListener("scroll", handleScroll);
-                    window.clearTimeout(settleTimerId);
-                    window.clearTimeout(safetyTimerId);
-                };
             }
+
+            let settleTimerId;
+            let safetyTimerId;
+
+            const finishAfterScroll = () => {
+                window.removeEventListener("scroll", handleScroll);
+                window.clearTimeout(settleTimerId);
+                window.clearTimeout(safetyTimerId);
+                focusSectionTitle();
+            };
+
+            const handleScroll = () => {
+                window.clearTimeout(settleTimerId);
+                settleTimerId = window.setTimeout(finishAfterScroll, 120);
+            };
+
+            window.addEventListener("scroll", handleScroll, {
+                passive: true,
+            });
+            safetyTimerId = window.setTimeout(finishAfterScroll, 2000);
+            setTitleKey((prev) => prev + 1);
+
+            return () => {
+                window.removeEventListener("scroll", handleScroll);
+                window.clearTimeout(settleTimerId);
+                window.clearTimeout(safetyTimerId);
+            };
         }
 
         setTitleKey((prev) => prev + 1);
-
-        return cleanupFocusAfterScroll;
-    }, [activeSection]);
+    }, [activeSection, focusSectionAfterScroll]);
 
     return (
         <main className="main-content">

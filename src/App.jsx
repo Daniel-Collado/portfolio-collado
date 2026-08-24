@@ -78,6 +78,7 @@ function App() {
     // Estado de secciones del portfolio
     const [activeSection, setActiveSection] = useState(null);
     const [isHeaderEntering, setIsHeaderEntering] = useState(false);
+    const focusSectionAfterScrollRef = useRef(false);
 
     // Contact form
     const [formData, setFormData] = useState({
@@ -214,6 +215,12 @@ function App() {
                                     <Header
                                         activeSection={activeSection}
                                         setActiveSection={setActiveSection}
+                                        onNavigationIntent={(
+                                            shouldFocusAfterScroll
+                                        ) => {
+                                            focusSectionAfterScrollRef.current =
+                                                shouldFocusAfterScroll;
+                                        }}
                                         className={`header ${
                                             isHeaderEntering
                                                 ? "header-entering"
@@ -224,6 +231,9 @@ function App() {
                                     {activeSection !== null && (
                                         <PortfolioContent
                                             activeSection={activeSection}
+                                            focusSectionAfterScroll={
+                                                focusSectionAfterScrollRef.current
+                                            }
                                             scrollToTop={scrollToTop}
                                             formData={formData}
                                             setFormData={setFormData}

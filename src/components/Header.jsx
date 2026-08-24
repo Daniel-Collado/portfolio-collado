@@ -4,13 +4,20 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { trackSectionView } from "../lib/analytics/analytics";
 
-const Header = ({ activeSection, setActiveSection, className }) => {
+const Header = ({
+    activeSection,
+    setActiveSection,
+    onNavigationIntent,
+    className,
+}) => {
     const { t } = useTranslation();
 
-    const handleNavLinkClick = (sectionId) => {
+    const handleNavLinkClick = (event, sectionId) => {
         if (activeSection === sectionId) {
             return;
         }
+
+        onNavigationIntent(event.detail === 0);
         setActiveSection(sectionId);
         trackSectionView(sectionId);
     };
@@ -28,7 +35,7 @@ const Header = ({ activeSection, setActiveSection, className }) => {
             {/* Navegación */}
             <nav className="header-nav">
                 <button
-                    onClick={() => handleNavLinkClick("sobre-mi")}
+                    onClick={(event) => handleNavLinkClick(event, "sobre-mi")}
                     aria-pressed={activeSection === "sobre-mi"}
                     className={`nav-button ${
                         activeSection === "sobre-mi" ? "active" : ""
@@ -38,7 +45,7 @@ const Header = ({ activeSection, setActiveSection, className }) => {
                 </button>
 
                 <button
-                    onClick={() => handleNavLinkClick("proyectos")}
+                    onClick={(event) => handleNavLinkClick(event, "proyectos")}
                     aria-pressed={activeSection === "proyectos"}
                     className={`nav-button ${
                         activeSection === "proyectos" ? "active" : ""
@@ -48,7 +55,7 @@ const Header = ({ activeSection, setActiveSection, className }) => {
                 </button>
 
                 <button
-                    onClick={() => handleNavLinkClick("formacion")}
+                    onClick={(event) => handleNavLinkClick(event, "formacion")}
                     aria-pressed={activeSection === "formacion"}
                     className={`nav-button ${
                         activeSection === "formacion" ? "active" : ""
@@ -58,7 +65,7 @@ const Header = ({ activeSection, setActiveSection, className }) => {
                 </button>
 
                 <button
-                    onClick={() => handleNavLinkClick("servicios")}
+                    onClick={(event) => handleNavLinkClick(event, "servicios")}
                     aria-pressed={activeSection === "servicios"}
                     className={`nav-button ${
                         activeSection === "servicios" ? "active" : ""
@@ -68,7 +75,7 @@ const Header = ({ activeSection, setActiveSection, className }) => {
                 </button>
 
                 <button
-                    onClick={() => handleNavLinkClick("contacto")}
+                    onClick={(event) => handleNavLinkClick(event, "contacto")}
                     aria-pressed={activeSection === "contacto"}
                     className={`nav-button ${
                         activeSection === "contacto" ? "active" : ""
