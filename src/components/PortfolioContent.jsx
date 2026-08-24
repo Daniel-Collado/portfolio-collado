@@ -36,21 +36,84 @@ const PortfolioContent = ({
         }
 
         const section = document.getElementById(activeSection);
+        let cleanupFocusAfterScroll = () => {};
 
         if (section) {
+            const reduceMotion = window.matchMedia(
+                "(prefers-reduced-motion: reduce)",
+            ).matches;
+
             section.scrollIntoView({
-                behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
-                    .matches
-                    ? "auto"
-                    : "smooth",
+                behavior: reduceMotion ? "auto" : "smooth",
             });
 
-            window.requestAnimationFrame(() => {
+            const focusSectionTitle = () => {
                 section.querySelector("h2")?.focus({ preventScroll: true });
-            });
+            };
+
+            if (reduceMotion) {
+                const frameId = window.requestAnimationFrame(focusSectionTitle);
+                cleanupFocusAfterScroll = () =>
+                    window.cancelAnimationFrame(frameId);
+            } else if (
+                "onscrollend" in document ||
+                "onscrollend" in window
+            ) {
+                const scrollEndTarget =
+                    "onscrollend" in document ? document : window;
+                let safetyTimerId;
+                const handleScrollEnd = () => {
+                    scrollEndTarget.removeEventListener(
+                        "scrollend",
+                        handleScrollEnd,
+                    );
+                    window.clearTimeout(safetyTimerId);
+                    focusSectionTitle();
+                };
+
+                scrollEndTarget.addEventListener("scrollend", handleScrollEnd, {
+                    once: true,
+                });
+                safetyTimerId = window.setTimeout(handleScrollEnd, 2000);
+                cleanupFocusAfterScroll = () => {
+                    scrollEndTarget.removeEventListener(
+                        "scrollend",
+                        handleScrollEnd,
+                    );
+                    window.clearTimeout(safetyTimerId);
+                };
+            } else {
+                let settleTimerId;
+                let safetyTimerId;
+
+                const finishAfterScroll = () => {
+                    window.removeEventListener("scroll", handleScroll);
+                    window.clearTimeout(settleTimerId);
+                    window.clearTimeout(safetyTimerId);
+                    focusSectionTitle();
+                };
+
+                const handleScroll = () => {
+                    window.clearTimeout(settleTimerId);
+                    settleTimerId = window.setTimeout(finishAfterScroll, 120);
+                };
+
+                window.addEventListener("scroll", handleScroll, {
+                    passive: true,
+                });
+                safetyTimerId = window.setTimeout(finishAfterScroll, 2000);
+
+                cleanupFocusAfterScroll = () => {
+                    window.removeEventListener("scroll", handleScroll);
+                    window.clearTimeout(settleTimerId);
+                    window.clearTimeout(safetyTimerId);
+                };
+            }
         }
 
         setTitleKey((prev) => prev + 1);
+
+        return cleanupFocusAfterScroll;
     }, [activeSection]);
 
     return (
