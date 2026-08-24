@@ -1,8 +1,12 @@
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import "./CertificateModal.css";
 import { trackCredentialOpen } from "../../lib/analytics/analytics";
+import { useDialogFocus } from "../../hooks/useDialogFocus";
 
 const CertificateModal = ({ certificate, onClose }) => {
+    const { t, i18n } = useTranslation();
+    const dialogRef = useDialogFocus({ active: Boolean(certificate), onClose });
     useEffect(() => {
         if (!certificate) {
             return;
@@ -23,6 +27,12 @@ const CertificateModal = ({ certificate, onClose }) => {
     if (!certificate) {
         return null;
     }
+    const currentLang = i18n.language.split("-")[0];
+    const localizedTitle =
+        certificate[`title_${currentLang}`] ||
+        certificate.title_es ||
+        certificate.title_en ||
+        t("certificate_untitled");
     const isPdf = certificate.certificate_url?.toLowerCase().endsWith(".pdf");
 
     const previewUrl = isPdf
@@ -31,26 +41,33 @@ const CertificateModal = ({ certificate, onClose }) => {
               .replace(/\.pdf$/i, "")
         : certificate.certificate_url;
     return (
-        <div className="certificate-modal-backdrop" onClick={onClose}>
+        <div className="certificate-modal-backdrop" onMouseDown={onClose}>
             <div
+                ref={dialogRef}
                 className="certificate-modal"
-                onClick={(e) => e.stopPropagation()}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="certificate-modal-title"
+                tabIndex="-1"
+                onMouseDown={(e) => e.stopPropagation()}
             >
                 <button
                     className="certificate-modal-close"
                     onClick={onClose}
-                    aria-label="Cerrar"
+                    aria-label={t("close_certificate")}
                 >
                     ×
                 </button>
 
                 <img
                     src={previewUrl}
-                    alt={certificate.title}
+                    alt={t("certificate_preview_alt", {
+                        title: localizedTitle,
+                    })}
                     className="certificate-modal-image"
                 />
 
-                <h3>{certificate.title}</h3>
+                <h3 id="certificate-modal-title">{localizedTitle}</h3>
 
                 <p>{certificate.year}</p>
 
@@ -67,7 +84,7 @@ const CertificateModal = ({ certificate, onClose }) => {
                             )
                         }
                     >
-                        Ver credencial oficial
+                        {t("view_official_credential")}
                     </a>
                 )}
             </div>

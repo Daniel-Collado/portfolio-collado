@@ -1,45 +1,71 @@
-import { motion } from "framer-motion";
+import { motion as Motion, useReducedMotion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import "./SettingsPanel.css";
-import { trackThemeChange, trackLanguageChange } from "../../lib/analytics/analytics";
-
+import {
+    trackThemeChange,
+    trackLanguageChange,
+} from "../../lib/analytics/analytics";
+import { useDialogFocus } from "../../hooks/useDialogFocus";
 
 export default function SettingsPanel({
     onClose,
     themeHook,
     fontHook,
-    bgHook
+    bgHook,
 }) {
-    const { i18n } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const reduceMotion = useReducedMotion();
+    const dialogRef = useDialogFocus({ onClose });
 
     return (
         <>
-            <motion.div
+            <Motion.div
                 className="settings-overlay"
                 onClick={onClose}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
+                transition={{ duration: reduceMotion ? 0 : 0.2 }}
             />
 
-            <motion.div
+            <Motion.div
+                ref={dialogRef}
                 className="settings-panel"
-                initial={{ x: 350 }}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="settings-title"
+                tabIndex="-1"
+                initial={{ x: reduceMotion ? 0 : 350 }}
                 animate={{ x: 0 }}
-                exit={{ x: 350 }}
-                transition={{ type: "spring", stiffness: 140, damping: 18 }}
+                exit={{ x: reduceMotion ? 0 : 350 }}
+                transition={
+                    reduceMotion
+                        ? { duration: 0 }
+                        : { type: "spring", stiffness: 140, damping: 18 }
+                }
             >
-                <h2 className="settings-title">Configuración</h2>
-                <button className="settings-close" onClick={onClose} aria-label="Cerrar configuración">x</button>
+                <h2 id="settings-title" className="settings-title">
+                    {t("settings_title")}
+                </h2>
+                <button
+                    className="settings-close"
+                    onClick={onClose}
+                    aria-label={t("settings_close")}
+                >
+                    ×
+                </button>
 
                 {/* Idioma */}
                 <div className="settings-section">
-                    <h4>Idioma</h4>
+                    <h3>{t("settings_language")}</h3>
                     <div className="settings-option">
-                        <span>Idioma actual:</span>
+                        <label htmlFor="settings-language">
+                            {t("settings_current_language")}
+                        </label>
                         <select
-                            value={i18n.language}
+                            id="settings-language"
+                            value={i18n.language.split("-")[0]}
                             onChange={(e) => {
                                 const nextLanguage = e.target.value;
 
@@ -56,11 +82,17 @@ export default function SettingsPanel({
 
                 {/* Tema claro / oscuro */}
                 <div className="settings-section">
-                    <h4>Tema</h4>
+                    <h3>{t("settings_theme")}</h3>
                     <div className="settings-option">
-                        <span>{themeHook.theme === "dark" ? "Oscuro" : "Claro"}</span>
+                        <span>
+                            {themeHook.theme === "dark"
+                                ? t("theme_dark")
+                                : t("theme_light")}
+                        </span>
                         <button
-                            onClick={() => {const nextTheme =
+                            type="button"
+                            onClick={() => {
+                                const nextTheme =
                                     themeHook.theme === "dark"
                                         ? "light"
                                         : "dark";
@@ -69,7 +101,7 @@ export default function SettingsPanel({
                                 themeHook.toggleTheme();
                             }}
                         >
-                            Cambiar
+                            {t("settings_change_theme")}
                         </button>
                     </div>
                 </div>
@@ -77,15 +109,24 @@ export default function SettingsPanel({
                 {/* Presets de tema */}
                 {themeHook.theme === "light" && (
                     <div className="settings-section">
-                        <h4>Tema claro</h4>
+                        <h3>{t("settings_light_theme")}</h3>
                         <div className="settings-option">
-                            <span>Paleta:</span>
+                            <label htmlFor="light-palette">
+                                {t("settings_palette")}
+                            </label>
                             <select
+                                id="light-palette"
                                 value={themeHook.preset}
-                                onChange={(e) => themeHook.setPreset(e.target.value)}
+                                onChange={(e) =>
+                                    themeHook.setPreset(e.target.value)
+                                }
                             >
-                                <option value="light-a">Light A</option>
-                                <option value="light-b">Light B</option>
+                                <option value="light-a">
+                                    {t("palette_light_a")}
+                                </option>
+                                <option value="light-b">
+                                    {t("palette_light_b")}
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -93,15 +134,24 @@ export default function SettingsPanel({
 
                 {themeHook.theme === "dark" && (
                     <div className="settings-section">
-                        <h4>Tema oscuro</h4>
+                        <h3>{t("settings_dark_theme")}</h3>
                         <div className="settings-option">
-                            <span>Paleta:</span>
+                            <label htmlFor="dark-palette">
+                                {t("settings_palette")}
+                            </label>
                             <select
+                                id="dark-palette"
                                 value={themeHook.preset}
-                                onChange={(e) => themeHook.setPreset(e.target.value)}
+                                onChange={(e) =>
+                                    themeHook.setPreset(e.target.value)
+                                }
                             >
-                                <option value="dark-a">Dark A</option>
-                                <option value="dark-b">Dark B</option>
+                                <option value="dark-a">
+                                    {t("palette_dark_a")}
+                                </option>
+                                <option value="dark-b">
+                                    {t("palette_dark_b")}
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -109,33 +159,47 @@ export default function SettingsPanel({
 
                 {/* Tamaño de fuente */}
                 <div className="settings-section">
-                    <h4>Tamaño de fuente</h4>
+                    <h3>{t("settings_font_size")}</h3>
                     <div className="settings-option">
-                        <button onClick={fontHook.decrease}>
-                            <FaMinus />
+                        <button
+                            type="button"
+                            onClick={fontHook.decrease}
+                            aria-label={t("font_decrease")}
+                            disabled={fontHook.scale <= 0.8}
+                        >
+                            <FaMinus aria-hidden="true" />
                         </button>
-                        <span>{(fontHook.scale * 100).toFixed(0)}%</span>
-                        <button onClick={fontHook.increase}>
-                            <FaPlus />
+                        <output aria-live="polite">
+                            {(fontHook.scale * 100).toFixed(0)}%
+                        </output>
+                        <button
+                            type="button"
+                            onClick={fontHook.increase}
+                            aria-label={t("font_increase")}
+                            disabled={fontHook.scale >= 1.4}
+                        >
+                            <FaPlus aria-hidden="true" />
                         </button>
                     </div>
                 </div>
 
                 {/* Fondo animado */}
                 <div className="settings-section">
-                    <h4>Animación de fondo</h4>
+                    <h3>{t("settings_background_animation")}</h3>
                     <div className="settings-option">
                         <span>
-                            {bgHook.enabled ? "Activada" : "Desactivada"}
+                            {bgHook.enabled ? t("enabled") : t("disabled")}
                         </span>
                         <button
+                            type="button"
+                            aria-pressed={bgHook.enabled}
                             onClick={() => bgHook.setEnabled(!bgHook.enabled)}
                         >
-                            Cambiar
+                            {t("settings_toggle_animation")}
                         </button>
                     </div>
                 </div>
-            </motion.div>
+            </Motion.div>
         </>
     );
 }

@@ -29,7 +29,7 @@ export function useTheme() {
         localStorage.setItem("theme-preset", preset);
 
         // Actualizar theme-color para móviles
-        const themeColorMeta = document.getElementById('theme-color-meta');
+        const themeColorMeta = document.getElementById("theme-color-meta");
         const colorMap = {
             "light-a": "#C5D6E8",
             "light-b": "#6487B7",
@@ -43,7 +43,14 @@ export function useTheme() {
     }, [theme, preset]);
 
     const toggleTheme = () => {
-        setTheme(theme === "dark" ? "light" : "dark");
+        setTheme((currentTheme) => {
+            const nextTheme = currentTheme === "dark" ? "light" : "dark";
+            setPreset((currentPreset) => {
+                if (currentPreset.startsWith(nextTheme)) return currentPreset;
+                return nextTheme === "dark" ? "dark-a" : "light-a";
+            });
+            return nextTheme;
+        });
     };
 
     return {

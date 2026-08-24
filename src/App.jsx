@@ -1,6 +1,6 @@
 // src/App.jsx
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, Suspense, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import emailjs from "@emailjs/browser";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
@@ -19,7 +19,10 @@ import { useBackgroundAnimation } from "./hooks/useBackgroundAnimation";
 
 import "./index.css";
 import AnalyticsTracker from "./components/analytics/AnalyticsTracker";
-import { trackContactSubmit, trackContactSubmitError } from "./lib/analytics/analytics";
+import {
+    trackContactSubmit,
+    trackContactSubmitError,
+} from "./lib/analytics/analytics";
 
 // Lazy-load admin modules
 const AdminLogin = React.lazy(() => import("./components/AdminLogin.jsx"));
@@ -27,31 +30,34 @@ const AdminPanel = React.lazy(() => import("./components/AdminPanel.jsx"));
 
 function RequireAuth({ children }) {
     const location = useLocation();
-    const [authState, setAuthState] = useState({ status: "loading", user: null });
+    const [authState, setAuthState] = useState({
+        status: "loading",
+        user: null,
+    });
 
     useEffect(() => {
         let unsubscribe;
 
         (async () => {
-        try {
-            const { onAuthStateChanged } = await import("firebase/auth");
-            const { getAuth } = await import("./firebase.js");
-            const auth = await getAuth();
+            try {
+                const { onAuthStateChanged } = await import("firebase/auth");
+                const { getAuth } = await import("./firebase.js");
+                const auth = await getAuth();
 
-            unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setAuthState({ status: "authed", user });
-            } else {
+                unsubscribe = onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        setAuthState({ status: "authed", user });
+                    } else {
+                        setAuthState({ status: "guest", user: null });
+                    }
+                });
+            } catch {
                 setAuthState({ status: "guest", user: null });
             }
-            });
-        } catch {
-            setAuthState({ status: "guest", user: null });
-        }
         })();
 
         return () => {
-        if (typeof unsubscribe === "function") unsubscribe();
+            if (typeof unsubscribe === "function") unsubscribe();
         };
     }, []);
 
@@ -87,34 +93,55 @@ function App() {
     const bgHook = useBackgroundAnimation();
 
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const settingsButtonRef = useRef(null);
+
+    const closeSettings = () => {
+        setIsSettingsOpen(false);
+        window.requestAnimationFrame(() => settingsButtonRef.current?.focus());
+    };
 
     const scrollToTop = () => {
         setIsHeaderEntering(true);
 
-        const duration = 600; // duración total en ms (ajustable)
-        const interval = 15;  // frecuencia del scroll (ms)
-        const totalSteps = duration / interval;
-        const scrollStep = -window.scrollY / totalSteps;
+        const reduceMotion = window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+        ).matches;
 
-        const scrollInterval = setInterval(() => {
-            if (window.scrollY > 0) {
-            window.scrollBy(0, scrollStep);
-            } else {
-            clearInterval(scrollInterval);
-            window.scrollTo(0, 0); // aseguro llegar exacto
+        const finishScroll = () => {
+            window.scrollTo(0, 0);
             setActiveSection(null);
             setIsHeaderEntering(false);
-            }
-        }, interval);
+            document.querySelector(".header-title")?.focus({
+                preventScroll: true,
+            });
+        };
+
+        if (reduceMotion) {
+            window.scrollTo(0, 0);
+            finishScroll();
+        } else {
+            const duration = 600;
+            const interval = 15;
+            const totalSteps = duration / interval;
+            const scrollStep = -window.scrollY / totalSteps;
+
+            const scrollInterval = window.setInterval(() => {
+                if (window.scrollY > 0) {
+                    window.scrollBy(0, scrollStep);
+                } else {
+                    window.clearInterval(scrollInterval);
+                    finishScroll();
+                }
+            }, interval);
+        }
     };
-
-
 
     // Manejo del formulario
     const handleChange = (e) => {
+        if (status && status !== "submitting") setStatus("");
         setFormData((prev) => ({
-        ...prev,
-        [e.target.name]: e.target.value,
+            ...prev,
+            [e.target.name]: e.target.value,
         }));
     };
 
@@ -122,105 +149,121 @@ function App() {
         e.preventDefault();
 
         if (!formData.from_name || !formData.from_email || !formData.message) {
-        setStatus(t("form_error_missing_fields"));
-        return;
+            setStatus({
+                type: "error",
+                message: t("form_error_missing_fields"),
+            });
+            return;
         }
 
         if (!/\S+@\S+\.\S+/.test(formData.from_email)) {
-        setStatus(t("form_error_invalid_email"));
-        return;
+            setStatus({
+                type: "error",
+                message: t("form_error_invalid_email"),
+            });
+            return;
         }
 
-        emailjs
-        .send(
-            import.meta.env.VITE_EMAILJS_SERVICE_ID,
-            import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-            formData,
-            import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-        )
-        .then(
-            () => {
-                trackContactSubmit();
-                setStatus(t("form_success"));
-            },
+        setStatus("submitting");
 
-            () => {
-                trackContactSubmitError("emailjs");
-                setStatus(t("form_error"));
-            }
-        );
+        emailjs
+            .send(
+                import.meta.env.VITE_EMAILJS_SERVICE_ID,
+                import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+                formData,
+                import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+            )
+            .then(
+                () => {
+                    trackContactSubmit();
+                    setStatus({ type: "success", message: t("form_success") });
+                    setFormData({ from_name: "", from_email: "", message: "" });
+                },
+
+                () => {
+                    trackContactSubmitError("emailjs");
+                    setStatus({ type: "error", message: t("form_error") });
+                }
+            );
     };
 
     return (
         <div className="app">
-        <AnalyticsTracker />
-        {/* Fondo global */}
-        <GradientBackground />
+            <AnalyticsTracker />
+            {/* Fondo global */}
+            <GradientBackground />
 
-        {/* Botón de configuración fijo arriba a la derecha (Opción A) */}
-        {!isSettingsOpen && (
-            <SettingsButton onClick={() => setIsSettingsOpen(true)} />
-        )}
-
-
-        <div className="content-wrapper">
-            <Suspense fallback={<div className="loading-screen">Cargando...</div>}>
-            <Routes>
-                <Route
-                path="/"
-                element={
-                    <>
-                    <Header
-                        activeSection={activeSection}
-                        setActiveSection={setActiveSection}
-                        className={`header ${
-                        isHeaderEntering ? "header-entering" : ""
-                        }`}
-                    />
-
-                    {activeSection !== null && (
-                        <PortfolioContent
-                        activeSection={activeSection}
-                        scrollToTop={scrollToTop}
-                        formData={formData}
-                        setFormData={setFormData}    
-                        status={status}
-                        setStatus={setStatus}        
-                        handleChange={handleChange}
-                        handleSubmit={handleSubmit}
-                        />
-                    )}
-                    </>
-                }
+            {/* Botón de configuración fijo arriba a la derecha (Opción A) */}
+            {!isSettingsOpen && (
+                <SettingsButton
+                    buttonRef={settingsButtonRef}
+                    onClick={() => setIsSettingsOpen(true)}
+                    label={t("settings_open")}
                 />
-
-                <Route path="/adminlogin" element={<AdminLogin />} />
-
-                <Route
-                path="/admin"
-                element={
-                    <RequireAuth>
-                    <AdminPanel />
-                    </RequireAuth>
-                }
-                />
-
-                <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-            </Suspense>
-        </div>
-
-        {/* Panel lateral de configuración */}
-        <AnimatePresence>
-            {isSettingsOpen && (
-            <SettingsPanel
-                onClose={() => setIsSettingsOpen(false)}
-                themeHook={themeHook}
-                fontHook={fontHook}
-                bgHook={bgHook}
-            />
             )}
-        </AnimatePresence>
+
+            <div className="content-wrapper">
+                <Suspense
+                    fallback={<div className="loading-screen">Cargando...</div>}
+                >
+                    <Routes>
+                        <Route
+                            path="/"
+                            element={
+                                <>
+                                    <Header
+                                        activeSection={activeSection}
+                                        setActiveSection={setActiveSection}
+                                        className={`header ${
+                                            isHeaderEntering
+                                                ? "header-entering"
+                                                : ""
+                                        }`}
+                                    />
+
+                                    {activeSection !== null && (
+                                        <PortfolioContent
+                                            activeSection={activeSection}
+                                            scrollToTop={scrollToTop}
+                                            formData={formData}
+                                            setFormData={setFormData}
+                                            status={status}
+                                            setStatus={setStatus}
+                                            handleChange={handleChange}
+                                            handleSubmit={handleSubmit}
+                                        />
+                                    )}
+                                </>
+                            }
+                        />
+
+                        <Route path="/adminlogin" element={<AdminLogin />} />
+
+                        <Route
+                            path="/admin"
+                            element={
+                                <RequireAuth>
+                                    <AdminPanel />
+                                </RequireAuth>
+                            }
+                        />
+
+                        <Route path="*" element={<Navigate to="/" replace />} />
+                    </Routes>
+                </Suspense>
+            </div>
+
+            {/* Panel lateral de configuración */}
+            <AnimatePresence>
+                {isSettingsOpen && (
+                    <SettingsPanel
+                        onClose={closeSettings}
+                        themeHook={themeHook}
+                        fontHook={fontHook}
+                        bgHook={bgHook}
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 }

@@ -39,7 +39,14 @@ const PortfolioContent = ({
 
         if (section) {
             section.scrollIntoView({
-                behavior: "smooth",
+                behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+                    .matches
+                    ? "auto"
+                    : "smooth",
+            });
+
+            window.requestAnimationFrame(() => {
+                section.querySelector("h2")?.focus({ preventScroll: true });
             });
         }
 
@@ -51,7 +58,11 @@ const PortfolioContent = ({
             {/* SOBRE MÍ */}
             {activeSection === "sobre-mi" && (
                 <section id="sobre-mi" className="section-container">
-                    <h2 key={titleKey} className="section-title animate-title">
+                    <h2
+                        key={titleKey}
+                        className="section-title animate-title"
+                        tabIndex="-1"
+                    >
                         {t("about")}
                     </h2>
 
@@ -86,7 +97,7 @@ const PortfolioContent = ({
                                 </a>
 
                                 <a
-                                    href="https://github.com/TU-USUARIO"
+                                    href="https://github.com/Daniel-Collado"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="about-social-link"
@@ -114,7 +125,11 @@ const PortfolioContent = ({
             {/* SERVICIOS */}
             {activeSection === "servicios" && (
                 <section id="servicios" className="section-container">
-                    <h2 key={titleKey} className="section-title animate-title">
+                    <h2
+                        key={titleKey}
+                        className="section-title animate-title"
+                        tabIndex="-1"
+                    >
                         {t("services")}
                     </h2>
 
@@ -125,7 +140,11 @@ const PortfolioContent = ({
             {/* CONTACTO */}
             {activeSection === "contacto" && (
                 <section id="contacto" className="section-container">
-                    <h2 key={titleKey} className="section-title animate-title">
+                    <h2
+                        key={titleKey}
+                        className="section-title animate-title"
+                        tabIndex="-1"
+                    >
                         {t("contact")}
                     </h2>
 
@@ -174,6 +193,7 @@ const PortfolioContent = ({
                                     onChange={handleChange}
                                     placeholder={t("form_name_placeholder")}
                                     required
+                                    disabled={status === "submitting"}
                                 />
                             </div>
 
@@ -190,6 +210,7 @@ const PortfolioContent = ({
                                     onChange={handleChange}
                                     placeholder={t("form_email_placeholder")}
                                     required
+                                    disabled={status === "submitting"}
                                 />
                             </div>
 
@@ -205,14 +226,34 @@ const PortfolioContent = ({
                                     onChange={handleChange}
                                     placeholder={t("form_message_placeholder")}
                                     required
+                                    disabled={status === "submitting"}
                                 />
                             </div>
 
-                            <button type="submit" className="form-submit">
-                                {t("form_submit")}
+                            <button
+                                type="submit"
+                                className="form-submit"
+                                disabled={status === "submitting"}
+                                aria-busy={status === "submitting"}
+                            >
+                                {status === "submitting"
+                                    ? t("form_submitting")
+                                    : t("form_submit")}
                             </button>
 
-                            {status && <p className="form-status">{status}</p>}
+                            {status && status !== "submitting" && (
+                                <p
+                                    className={`form-status form-status--${status.type}`}
+                                    role={
+                                        status.type === "error"
+                                            ? "alert"
+                                            : "status"
+                                    }
+                                    aria-live="polite"
+                                >
+                                    {status.message}
+                                </p>
+                            )}
                         </form>
                     </div>
                 </section>

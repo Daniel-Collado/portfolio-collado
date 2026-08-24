@@ -77,6 +77,9 @@
 
     --link: var(--color-dark);
     --link-hover: var(--color-primary);
+    --focus-ring: var(--color-dark);
+    --status-success: #176b45;
+    --status-error: #a22929;
 
     --section-bg: var(--surface-1); /* Añadir esta */
     --section-border: var(--border-subtle);
@@ -210,6 +213,9 @@
 
     --link: #8be9f0;
     --link-hover: #ffffff;
+    --focus-ring: #8be9f0;
+    --status-success: #86efac;
+    --status-error: #fca5a5;
 
     --bg-grad-1: #050816;
     --bg-grad-2: #0b1b3a;
@@ -250,6 +256,9 @@
 
     --link: #baa68b;
     --link-hover: #fce4e7;
+    --focus-ring: #fce4e7;
+    --status-success: #bbf7d0;
+    --status-error: #fecaca;
 
     --bg-grad-1: #001f2e; /* base */
     --bg-grad-2: #003e5a; /* transición */
@@ -292,6 +301,24 @@ body {
         color 0.3s ease;
     font-family: var(--font-body);
     font-weight: 400;
+}
+
+::selection {
+    background: var(--action);
+    color: var(--action-contrast);
+}
+
+* {
+    scrollbar-color: var(--border-subtle) transparent;
+}
+
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 3px;
+}
+
+:where(h1, h2, [role="dialog"])[tabindex="-1"]:focus {
+    outline: none;
 }
 
 /* =======================================================
@@ -403,7 +430,11 @@ body {
 
     border: 1px solid var(--border-subtle);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease,
+        border-color 0.3s ease,
+        transform 0.2s ease;
 }
 
 .nav-button:hover {
@@ -412,12 +443,30 @@ body {
     color: var(--text-primary);
 }
 
+.nav-button:active {
+    transform: translateY(1px);
+}
+
+.nav-button,
+.project-link,
+.scroll-top-button {
+    position: relative;
+}
+
+.nav-button::before,
+.project-link::before,
+.scroll-top-button::before {
+    content: "";
+    position: absolute;
+    inset: -7px;
+}
+
 /* Estilos para el botón de navegación activo */
 .nav-button.active {
     /* Antes: #008b8e fijo */
     background-color: var(--action);
     color: var(--action-contrast);
-    border: 2px solid rgba(255, 255, 255, 0.65);
+    border-color: var(--action-contrast);
     font-weight: 700;
 }
 
@@ -607,6 +656,8 @@ body {
     border: 1px solid var(--card-border, var(--border-subtle));
     padding: 1.5rem;
     text-align: center;
+    display: flex;
+    flex-direction: column;
     transition:
         transform 0.3s ease,
         background 0.3s ease,
@@ -642,7 +693,8 @@ body {
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
-    margin-top: 1rem;
+    margin-top: auto;
+    padding-top: 1rem;
 }
 
 /* --- Botones de proyectos adaptables --- */
@@ -651,6 +703,7 @@ body {
     align-items: center;
     justify-content: center;
     padding: 0.45rem 0.9rem;
+    box-sizing: border-box;
     border-radius: 9999px;
 
     /* Antes: blanco fijo */
@@ -661,7 +714,12 @@ body {
     font-size: clamp(0.8rem, 1.2vw, 0.9rem);
     font-weight: 500;
     text-decoration: none;
-    transition: all 0.3s ease;
+    cursor: pointer;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease,
+        border-color 0.3s ease,
+        transform 0.2s ease;
     border: 1px solid var(--border-subtle);
 }
 
@@ -669,6 +727,10 @@ body {
     /* Antes: #008b8e fijo */
     background-color: var(--action);
     color: var(--action-contrast);
+}
+
+.project-link:active {
+    transform: translateY(1px);
 }
 
 /* --- Estilo circular + tooltip GitHub (MANTENIDO) --- */
@@ -705,7 +767,8 @@ body {
     pointer-events: none;
 }
 
-.project-link.github:hover::after {
+.project-link.github:hover::after,
+.project-link.github:focus-visible::after {
     opacity: 1;
     visibility: visible;
     transform: translate(-50%, -4px);
@@ -777,7 +840,7 @@ body {
         gap: 0.8rem;
     }
     .header-title {
-        font-size: 3.5rem;
+        font-size: clamp(2.2rem, 4vw, 3.2rem);
     }
     .header-text {
         font-size: 1.3rem;
@@ -877,6 +940,12 @@ body {
     border-color: var(--action-hover);
 }
 
+.form-group input:disabled,
+.form-group textarea:disabled {
+    cursor: wait;
+    opacity: 0.7;
+}
+
 .form-group textarea {
     resize: vertical;
     min-height: 100px;
@@ -895,7 +964,11 @@ body {
     font-weight: 500;
     border: none;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease,
+        opacity 0.3s ease,
+        transform 0.2s ease;
     align-self: center;
 }
 
@@ -903,11 +976,66 @@ body {
     background-color: var(--action-hover);
 }
 
+.form-submit:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+.form-submit:disabled,
+.project-link:disabled,
+.settings-panel button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+    transform: none;
+    box-shadow: none;
+}
+
 .form-status {
     font-family: var(--font-body);
     font-size: 1rem;
-    color: var(--action-hover);
+    color: var(--text-primary);
     text-align: center;
+}
+
+.form-status--success {
+    color: var(--status-success);
+}
+
+.form-status--error {
+    color: var(--status-error);
+}
+
+.section-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.section-state p {
+    margin: 0;
+    max-width: 65ch;
+}
+
+.section-state--error {
+    color: var(--status-error);
+}
+
+.section-state-spinner {
+    width: 28px;
+    height: 28px;
+    border: 3px solid var(--border-subtle);
+    border-top-color: var(--action);
+    border-radius: 50%;
+    animation: state-spin 0.8s linear infinite;
+}
+
+@keyframes state-spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .contact-content .section-text.mb-4 {
@@ -920,9 +1048,44 @@ body {
 
     width: 100%;
 
-    margin-top: 1.5rem;
+    min-height: 0;
+    margin-top: 0;
     padding: 0 1.25rem;
     box-sizing: border-box;
+    overflow: hidden;
+}
+
+.education-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    margin-top: 0;
+    transition:
+        grid-template-rows 220ms cubic-bezier(0.2, 0, 0, 1),
+        opacity 160ms ease-out,
+        margin-top 220ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.education-panel--open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    margin-top: 1.5rem;
+}
+
+.education-groups {
+    width: 100%;
+    margin-top: 2rem;
+}
+
+.education-group {
+    margin-bottom: 1.5rem;
+}
+
+.education-group > .nav-button {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
 }
 
 .education-row {
@@ -934,6 +1097,10 @@ body {
     padding: 1rem 0;
 
     border-bottom: 1px solid var(--border-subtle);
+}
+
+.education-row .project-link {
+    flex-shrink: 0;
 }
 
 .education-row:last-child {
@@ -995,5 +1162,37 @@ body {
 
     .education-title {
         font-size: 0.88rem;
+    }
+
+    .email-section {
+        flex-direction: column;
+    }
+
+    .email-link {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .gradient-background,
+    .section-state-spinner,
+    .animate-title {
+        animation: none;
+    }
+
+    .header-entering {
+        transition: none;
+    }
+
+    .education-panel {
+        transition: none;
+    }
+
+    .project-card:hover,
+    .about-social-link:hover,
+    .settings-button:hover,
+    .settings-panel button:hover {
+        transform: none;
     }
 }

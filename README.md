@@ -104,10 +104,22 @@ Los temas se aplican dinámicamente mediante:
 
 ```js
 document.documentElement.dataset.theme = "dark-b"
+```
 
+Visual QA tooling
+
+Impeccable se utiliza como herramienta de auditoría visual.
+
+Instalación local:
+npx impeccable install --scope=project
+
+Actualización:
+npx impeccable update
+
+La instalación generada en .agents/ no se versiona.
+La configuración compartida se encuentra en .impeccable/config.json.
 
 
 📄 Licencia
 
 Este proyecto es personal. Si querés reutilizar partes de la arquitectura, diseño o lógica, consultame antes :)
-```

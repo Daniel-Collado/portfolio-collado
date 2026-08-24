@@ -18,7 +18,9 @@ const Header = ({ activeSection, setActiveSection, className }) => {
     return (
         <header className={className}>
             {/* Título principal */}
-            <h1 className="header-title">Daniel Collado || Portfolio</h1>
+            <h1 className="header-title" tabIndex="-1">
+                Daniel Collado || Portfolio
+            </h1>
 
             {/* Texto de bienvenida */}
             <p className="header-text">{t("welcome")}</p>
@@ -27,6 +29,7 @@ const Header = ({ activeSection, setActiveSection, className }) => {
             <nav className="header-nav">
                 <button
                     onClick={() => handleNavLinkClick("sobre-mi")}
+                    aria-pressed={activeSection === "sobre-mi"}
                     className={`nav-button ${
                         activeSection === "sobre-mi" ? "active" : ""
                     }`}
@@ -36,6 +39,7 @@ const Header = ({ activeSection, setActiveSection, className }) => {
 
                 <button
                     onClick={() => handleNavLinkClick("proyectos")}
+                    aria-pressed={activeSection === "proyectos"}
                     className={`nav-button ${
                         activeSection === "proyectos" ? "active" : ""
                     }`}
@@ -45,6 +49,7 @@ const Header = ({ activeSection, setActiveSection, className }) => {
 
                 <button
                     onClick={() => handleNavLinkClick("formacion")}
+                    aria-pressed={activeSection === "formacion"}
                     className={`nav-button ${
                         activeSection === "formacion" ? "active" : ""
                     }`}
@@ -54,6 +59,7 @@ const Header = ({ activeSection, setActiveSection, className }) => {
 
                 <button
                     onClick={() => handleNavLinkClick("servicios")}
+                    aria-pressed={activeSection === "servicios"}
                     className={`nav-button ${
                         activeSection === "servicios" ? "active" : ""
                     }`}
@@ -63,6 +69,7 @@ const Header = ({ activeSection, setActiveSection, className }) => {
 
                 <button
                     onClick={() => handleNavLinkClick("contacto")}
+                    aria-pressed={activeSection === "contacto"}
                     className={`nav-button ${
                         activeSection === "contacto" ? "active" : ""
                     }`}
