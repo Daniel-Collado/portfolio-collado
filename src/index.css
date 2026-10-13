@@ -97,7 +97,9 @@
     --card-bg: var(--surface-1);
     --card-border: var(--border-subtle);
     --card-border-hover: var(--border-subtle);
-    --card-shadow-hover: none;
+    --card-shadow: 0 8px 22px rgba(31, 47, 56, 0.1);
+    --card-shadow-hover: 0 14px 32px rgba(31, 47, 56, 0.16);
+    --card-glare: rgba(255, 255, 255, 0.28);
 
     /* -------- OTROS -------- */
     --font-size-base: 16px;
@@ -220,6 +222,10 @@
     --text-color: var(--text-primary);
     --heading-color: var(--heading);
     --accent-color: var(--color-accent);
+
+    --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+    --card-shadow-hover: 0 15px 34px rgba(0, 0, 0, 0.38);
+    --card-glare: rgba(139, 233, 240, 0.14);
 }
 
 /* =======================================================
@@ -267,7 +273,9 @@
     --card-bg: var(--surface-1);
     --card-border: rgba(186, 166, 139, 0.25);
     --card-border-hover: rgba(186, 166, 139, 0.55);
+    --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.32);
     --card-shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.45);
+    --card-glare: rgba(252, 228, 231, 0.15);
 }
 
 /* =======================================================
@@ -423,8 +431,7 @@ body {
 
 /* Estilos de las secciones */
 .main-content {
-    /* Antes: rgba(0,0,0,0.2) fijo */
-    background: var(--surface-2);
+    background: transparent;
     padding: 0;
     display: flex;
     flex-direction: column;
@@ -435,11 +442,10 @@ body {
 }
 
 .section-container {
-    /* Antes: rgba(0,0,0,0.4) fijo */
-    background: var(--section-bg, var(--surface-1));
-    border-radius: 1rem;
+    background: transparent;
+    border-radius: 0;
     padding: 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 0;
     margin-left: auto;
     margin-right: auto;
     max-width: 64rem;
@@ -451,7 +457,7 @@ body {
     box-sizing: border-box;
     width: 100%;
     transition: opacity 0.5s ease-in-out;
-    border: 1px solid var(--section-border, var(--border-subtle));
+    border: 0;
 }
 
 /* Clase para ocultar secciones (MANTENIDA como la tenías) */
@@ -602,23 +608,72 @@ body {
 }
 
 .project-card {
+    --glare-x: 50%;
+    --glare-y: 50%;
+    --rotate-x: 0deg;
+    --rotate-y: 0deg;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     background: var(--card-bg, var(--surface-2));
     border-radius: 0.75rem;
     border: 1px solid var(--card-border, var(--border-subtle));
     padding: 1.5rem;
     text-align: center;
+    box-shadow: var(--card-shadow);
+    transform: perspective(900px) rotateX(var(--rotate-x))
+        rotateY(var(--rotate-y));
     transition:
-        transform 0.3s ease,
+        transform 0.22s ease-out,
         background 0.3s ease,
         box-shadow 0.3s ease,
         border-color 0.3s ease;
 }
 
-.project-card:hover {
-    transform: translateY(-5px);
-    background: var(--card-bg, var(--surface-1));
-    border-color: var(--card-border-hover, var(--border-subtle));
-    box-shadow: var(--card-shadow-hover, none);
+.project-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(
+        circle 150px at var(--glare-x) var(--glare-y),
+        var(--card-glare),
+        transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.project-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .project-card:hover {
+        transform: perspective(900px) translateY(-3px)
+            rotateX(var(--rotate-x)) rotateY(var(--rotate-y));
+        background: var(--card-bg, var(--surface-1));
+        border-color: var(--card-border-hover, var(--border-subtle));
+        box-shadow: var(--card-shadow-hover);
+    }
+
+    .project-card:hover::before {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .project-card,
+    .project-card:hover {
+        transform: none;
+        transition-duration: 0.01ms;
+    }
+
+    .project-card::before {
+        transition: none;
+    }
 }
 
 .project-title {

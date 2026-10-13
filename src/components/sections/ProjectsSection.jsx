@@ -106,6 +106,29 @@ const ProjectsSection = ({ titleKey }) => {
 
     const currentLang = i18n.language.split("-")[0];
 
+    const handlePointerMove = (event) => {
+        if (event.pointerType !== "mouse") {
+            return;
+        }
+
+        const card = event.currentTarget;
+        const rect = card.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        const normalizedX = x / rect.width - 0.5;
+        const normalizedY = y / rect.height - 0.5;
+
+        card.style.setProperty("--glare-x", `${x}px`);
+        card.style.setProperty("--glare-y", `${y}px`);
+        card.style.setProperty("--rotate-x", `${normalizedY * -2.5}deg`);
+        card.style.setProperty("--rotate-y", `${normalizedX * 2.5}deg`);
+    };
+
+    const handlePointerLeave = (event) => {
+        event.currentTarget.style.setProperty("--rotate-x", "0deg");
+        event.currentTarget.style.setProperty("--rotate-y", "0deg");
+    };
+
     return (
         <section id="proyectos" className="section-container">
             <h2 key={titleKey} className="section-title animate-title">
@@ -125,6 +148,8 @@ const ProjectsSection = ({ titleKey }) => {
                             key={project.id}
                             className="project-card"
                             data-project={project.title_es}
+                            onPointerMove={handlePointerMove}
+                            onPointerLeave={handlePointerLeave}
                             ref={(el) => {
                                 if (el) {
                                     projectRefs.current.set(project.id, el);
