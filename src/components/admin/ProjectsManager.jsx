@@ -1,7 +1,7 @@
 // src/components/ProjectsManager.jsx
 
 import React, { useState, useEffect } from "react";
-import { getDb, getAuth } from "../../firebase.js";
+import { getDb } from "../../firebase.js";
 import axios from "axios";
 import "../Admin.css";
 

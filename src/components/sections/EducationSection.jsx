@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CertificateModal from "../education/CertificateModal";
 import { trackCertificateOpen } from "../../lib/analytics/analytics";
+import SectionState from "../SectionState";
 
 let cachedEducation = null;
 
@@ -14,68 +15,65 @@ const EducationSection = ({ titleKey }) => {
     const [openCategory, setOpenCategory] = useState(null);
     const [selectedCertificate, setSelectedCertificate] = useState(null);
 
-    useEffect(() => {
-        if (cachedEducation) {
+    const fetchEducation = useCallback(async ({ ignoreCache = false } = {}) => {
+        if (cachedEducation && !ignoreCache) {
             setGroups(cachedEducation);
             return;
         }
 
-        const fetchEducation = async () => {
-            setLoading(true);
-            setError(null);
+        setLoading(true);
+        setError(null);
+
+        try {
+            const { getDb } = await import("../../firebase.js");
+            const db = await getDb();
+
+            const { collection, getDocs, orderBy, query } =
+                await import("firebase/firestore");
+
+            let q;
 
             try {
-                const { getDb } = await import("../../firebase.js");
-                const db = await getDb();
-
-                const { collection, getDocs, orderBy, query } =
-                    await import("firebase/firestore");
-
-                let q;
-
-                try {
-                    q = query(
-                        collection(db, "education"),
-                        orderBy("order", "asc")
-                    );
-                } catch {
-                    q = query(collection(db, "education"));
-                }
-
-                const snapshot = await getDocs(q);
-
-                const items = snapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                }));
-
-                const grouped = Object.values(
-                    items.reduce((acc, item) => {
-                        if (!acc[item.category]) {
-                            acc[item.category] = {
-                                category: item.category,
-                                items: [],
-                            };
-                        }
-
-                        acc[item.category].items.push(item);
-
-                        return acc;
-                    }, {})
-                );
-
-                cachedEducation = grouped;
-                setGroups(grouped);
-            } catch (err) {
-                console.error(err);
-                setError("Error al cargar la formación.");
-            } finally {
-                setLoading(false);
+                q = query(collection(db, "education"), orderBy("order", "asc"));
+            } catch {
+                q = query(collection(db, "education"));
             }
-        };
 
-        fetchEducation();
+            const snapshot = await getDocs(q);
+
+            const items = snapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+
+            const grouped = Object.values(
+                items.reduce((acc, item) => {
+                    if (!acc[item.category]) {
+                        acc[item.category] = {
+                            category: item.category,
+                            items: [],
+                        };
+                    }
+
+                    acc[item.category].items.push(item);
+
+                    return acc;
+                }, {})
+            );
+
+            cachedEducation = grouped;
+            setGroups(grouped);
+        } catch (err) {
+            console.error(err);
+            setError("Error al cargar la formación.");
+        } finally {
+            setLoading(false);
+        }
     }, []);
+
+    useEffect(() => {
+        fetchEducation();
+    }, [fetchEducation]);
 
     const toggleCategory = (category) => {
         setOpenCategory((current) => (current === category ? null : category));
@@ -84,92 +82,127 @@ const EducationSection = ({ titleKey }) => {
     return (
         <section id="formacion" className="section-container education-section">
             <div className="education-content">
-                <h2 key={titleKey} className="section-title animate-title">
+                <h2
+                    key={titleKey}
+                    className="section-title animate-title"
+                    tabIndex="-1"
+                >
                     {t("formation")}
                 </h2>
 
                 <p className="section-text">{t("formation_description")}</p>
 
                 {loading && (
-                    <p className="section-text">Cargando formación...</p>
+                    <SectionState
+                        type="loading"
+                        message={t("education_loading")}
+                    />
                 )}
 
-                {error && <p className="section-text">{error}</p>}
+                {error && (
+                    <SectionState
+                        type="error"
+                        message={t("education_error")}
+                        retryLabel={t("retry")}
+                        onRetry={() => fetchEducation({ ignoreCache: true })}
+                    />
+                )}
 
-                {!loading && !error && (
-                    <div
-                        style={{
-                            width: "100%",
-                            marginTop: "2rem",
-                        }}
-                    >
-                        {groups.map((group) => (
-                            <div
-                                key={group.category}
-                                style={{
-                                    marginBottom: "1.5rem",
-                                }}
-                            >
-                                <button
-                                    type="button"
-                                    className="nav-button"
-                                    style={{
-                                        width: "100%",
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                    }}
-                                    onClick={() =>
-                                        toggleCategory(group.category)
-                                    }
+                {!loading &&
+                    !error &&
+                    (groups.length ? (
+                        <div className="education-groups">
+                            {groups.map((group, groupIndex) => (
+                                <div
+                                    key={group.category}
+                                    className="education-group"
                                 >
-                                    <span>{group.category}</span>
+                                    <button
+                                        type="button"
+                                        className="nav-button"
+                                        aria-expanded={
+                                            openCategory === group.category
+                                        }
+                                        aria-controls={`education-panel-${groupIndex}`}
+                                        onClick={() =>
+                                            toggleCategory(group.category)
+                                        }
+                                    >
+                                        <span>{group.category}</span>
 
-                                    <span>({group.items.length})</span>
-                                </button>
+                                        <span
+                                            aria-label={t("certificate_count", {
+                                                count: group.items.length,
+                                            })}
+                                        >
+                                            ({group.items.length})
+                                        </span>
+                                    </button>
 
-                                {openCategory === group.category && (
-                                    <div className="education-list">
-                                        {group.items.map((course) => (
-                                            <div
-                                                key={course.id}
-                                                className="education-row"
-                                            >
-                                                <div className="education-info">
-                                                    <h3 className="education-title">
-                                                        {course[
-                                                            `title_${currentLang}`
-                                                        ] || "Sin título"}
-                                                    </h3>
-
-                                                    <span className="education-year">
-                                                        {course.year}
-                                                    </span>
-                                                </div>
-
-                                                <button
-                                                    type="button"
-                                                    className="project-link"
-                                                    onClick={() => {
-                                                        trackCertificateOpen(
-                                                            course.title_es,
-                                                            course.category
-                                                        );
-
-                                                        setSelectedCertificate(
-                                                            course
-                                                        );
-                                                    }}
+                                    <div
+                                        id={`education-panel-${groupIndex}`}
+                                        className={`education-panel ${
+                                            openCategory === group.category
+                                                ? "education-panel--open"
+                                                : ""
+                                        }`}
+                                        role="region"
+                                        aria-label={group.category}
+                                        aria-hidden={
+                                            openCategory !== group.category
+                                        }
+                                        inert={openCategory !== group.category}
+                                    >
+                                        <div className="education-list">
+                                            {group.items.map((course) => (
+                                                <div
+                                                    key={course.id}
+                                                    className="education-row"
                                                 >
-                                                    {t("view_certificate")}
-                                                </button>
-                                            </div>
-                                        ))}
+                                                    <div className="education-info">
+                                                        <h3 className="education-title">
+                                                            {course[
+                                                                `title_${currentLang}`
+                                                            ] ||
+                                                                t(
+                                                                    "certificate_untitled"
+                                                                )}
+                                                        </h3>
+
+                                                        <span className="education-year">
+                                                            {course.year}
+                                                        </span>
+                                                    </div>
+
+                                                    <button
+                                                        type="button"
+                                                        className="project-link"
+                                                        onClick={() => {
+                                                            trackCertificateOpen(
+                                                                course.title_es,
+                                                                course.category
+                                                            );
+
+                                                            setSelectedCertificate(
+                                                                course
+                                                            );
+                                                        }}
+                                                    >
+                                                        {t("view_certificate")}
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                )}
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <SectionState
+                            type="empty"
+                            message={t("education_empty")}
+                        />
+                    ))}
                 <CertificateModal
                     certificate={selectedCertificate}
                     onClose={() => setSelectedCertificate(null)}

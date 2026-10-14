@@ -9,6 +9,7 @@ import EducationSection from "./sections/EducationSection";
 
 const PortfolioContent = ({
     activeSection,
+    focusSectionAfterScroll,
     scrollToTop,
     formData,
     status,
@@ -36,22 +37,100 @@ const PortfolioContent = ({
         }
 
         const section = document.getElementById(activeSection);
-
         if (section) {
+            const reduceMotion = window.matchMedia(
+                "(prefers-reduced-motion: reduce)"
+            ).matches;
+
             section.scrollIntoView({
-                behavior: "smooth",
+                behavior: reduceMotion ? "auto" : "smooth",
             });
+
+            if (!focusSectionAfterScroll) {
+                setTitleKey((prev) => prev + 1);
+                return;
+            }
+
+            const focusSectionTitle = () => {
+                section.querySelector("h2")?.focus({ preventScroll: true });
+            };
+
+            if (reduceMotion) {
+                const frameId = window.requestAnimationFrame(focusSectionTitle);
+                setTitleKey((prev) => prev + 1);
+
+                return () => window.cancelAnimationFrame(frameId);
+            }
+
+            if ("onscrollend" in document || "onscrollend" in window) {
+                const scrollEndTarget =
+                    "onscrollend" in document ? document : window;
+                let safetyTimerId;
+                const handleScrollEnd = () => {
+                    scrollEndTarget.removeEventListener(
+                        "scrollend",
+                        handleScrollEnd
+                    );
+                    window.clearTimeout(safetyTimerId);
+                    focusSectionTitle();
+                };
+
+                scrollEndTarget.addEventListener("scrollend", handleScrollEnd, {
+                    once: true,
+                });
+                safetyTimerId = window.setTimeout(handleScrollEnd, 2000);
+                setTitleKey((prev) => prev + 1);
+
+                return () => {
+                    scrollEndTarget.removeEventListener(
+                        "scrollend",
+                        handleScrollEnd
+                    );
+                    window.clearTimeout(safetyTimerId);
+                };
+            }
+
+            let settleTimerId;
+            let safetyTimerId;
+
+            const finishAfterScroll = () => {
+                window.removeEventListener("scroll", handleScroll);
+                window.clearTimeout(settleTimerId);
+                window.clearTimeout(safetyTimerId);
+                focusSectionTitle();
+            };
+
+            const handleScroll = () => {
+                window.clearTimeout(settleTimerId);
+                settleTimerId = window.setTimeout(finishAfterScroll, 120);
+            };
+
+            window.addEventListener("scroll", handleScroll, {
+                passive: true,
+            });
+            safetyTimerId = window.setTimeout(finishAfterScroll, 2000);
+            setTitleKey((prev) => prev + 1);
+
+            return () => {
+                window.removeEventListener("scroll", handleScroll);
+                window.clearTimeout(settleTimerId);
+                window.clearTimeout(safetyTimerId);
+            };
         }
 
         setTitleKey((prev) => prev + 1);
-    }, [activeSection]);
+    }, [activeSection, focusSectionAfterScroll]);
 
     return (
         <main className="main-content">
             {/* SOBRE MÍ */}
             {activeSection === "sobre-mi" && (
                 <section id="sobre-mi" className="section-container">
-                    <h2 key={titleKey} className="section-title animate-title">
+                    <h2
+                        key={titleKey}
+                        className="section-title animate-title"
+                        tabIndex="-1"
+                    >
                         {t("about")}
                     </h2>
 
@@ -86,7 +165,7 @@ const PortfolioContent = ({
                                 </a>
 
                                 <a
-                                    href="https://github.com/TU-USUARIO"
+                                    href="https://github.com/Daniel-Collado"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="about-social-link"
@@ -114,7 +193,11 @@ const PortfolioContent = ({
             {/* SERVICIOS */}
             {activeSection === "servicios" && (
                 <section id="servicios" className="section-container">
-                    <h2 key={titleKey} className="section-title animate-title">
+                    <h2
+                        key={titleKey}
+                        className="section-title animate-title"
+                        tabIndex="-1"
+                    >
                         {t("services")}
                     </h2>
 
@@ -125,7 +208,11 @@ const PortfolioContent = ({
             {/* CONTACTO */}
             {activeSection === "contacto" && (
                 <section id="contacto" className="section-container">
-                    <h2 key={titleKey} className="section-title animate-title">
+                    <h2
+                        key={titleKey}
+                        className="section-title animate-title"
+                        tabIndex="-1"
+                    >
                         {t("contact")}
                     </h2>
 
@@ -174,6 +261,7 @@ const PortfolioContent = ({
                                     onChange={handleChange}
                                     placeholder={t("form_name_placeholder")}
                                     required
+                                    disabled={status === "submitting"}
                                 />
                             </div>
 
@@ -190,6 +278,7 @@ const PortfolioContent = ({
                                     onChange={handleChange}
                                     placeholder={t("form_email_placeholder")}
                                     required
+                                    disabled={status === "submitting"}
                                 />
                             </div>
 
@@ -205,14 +294,34 @@ const PortfolioContent = ({
                                     onChange={handleChange}
                                     placeholder={t("form_message_placeholder")}
                                     required
+                                    disabled={status === "submitting"}
                                 />
                             </div>
 
-                            <button type="submit" className="form-submit">
-                                {t("form_submit")}
+                            <button
+                                type="submit"
+                                className="form-submit"
+                                disabled={status === "submitting"}
+                                aria-busy={status === "submitting"}
+                            >
+                                {status === "submitting"
+                                    ? t("form_submitting")
+                                    : t("form_submit")}
                             </button>
 
-                            {status && <p className="form-status">{status}</p>}
+                            {status && status !== "submitting" && (
+                                <p
+                                    className={`form-status form-status--${status.type}`}
+                                    role={
+                                        status.type === "error"
+                                            ? "alert"
+                                            : "status"
+                                    }
+                                    aria-live="polite"
+                                >
+                                    {status.message}
+                                </p>
+                            )}
                         </form>
                     </div>
                 </section>

@@ -1,9 +1,14 @@
 import { FaCog } from "react-icons/fa";
 
-export default function SettingsButton({ onClick }) {
+export default function SettingsButton({ onClick, label, buttonRef }) {
     return (
-        <button className="settings-button" aria-label="Abrir configuración" onClick={onClick}>
-        <FaCog size={18} />
+        <button
+            ref={buttonRef}
+            className="settings-button"
+            aria-label={label}
+            onClick={onClick}
+        >
+            <FaCog size={18} aria-hidden="true" />
         </button>
     );
 }

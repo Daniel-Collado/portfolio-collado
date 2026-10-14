@@ -13,6 +13,13 @@ dist-ssr
 *.local
 .env
 
+# Impeccable: consentimiento y preferencias locales del desarrollador
+.impeccable/config.local.json
+
+# Impeccable: instalación Project y hook de Codex regenerables
+.agents/skills/impeccable/
+.codex/hooks.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
