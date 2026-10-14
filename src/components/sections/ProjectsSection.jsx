@@ -118,15 +118,17 @@ const ProjectsSection = ({ titleKey }) => {
         const normalizedX = x / rect.width - 0.5;
         const normalizedY = y / rect.height - 0.5;
 
-        card.style.setProperty("--glare-x", `${x}px`);
-        card.style.setProperty("--glare-y", `${y}px`);
-        card.style.setProperty("--rotate-x", `${normalizedY * -2.5}deg`);
-        card.style.setProperty("--rotate-y", `${normalizedX * 2.5}deg`);
+        card.dataset.tilting = "true";
+        card.style.setProperty("--rotate-x", `${normalizedY * -8}deg`);
+        card.style.setProperty("--rotate-y", `${normalizedX * 8}deg`);
     };
 
     const handlePointerLeave = (event) => {
-        event.currentTarget.style.setProperty("--rotate-x", "0deg");
-        event.currentTarget.style.setProperty("--rotate-y", "0deg");
+        const card = event.currentTarget;
+
+        delete card.dataset.tilting;
+        card.style.setProperty("--rotate-x", "0deg");
+        card.style.setProperty("--rotate-y", "0deg");
     };
 
     return (
